@@ -24,10 +24,10 @@ const Header = () => {
                                     <a href="#"><IconTruckDelivery /> Logistics</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="/user-login"><IconUserScan /> Register</a>
+                                    <a href="/admin"><IconUserScan /> Register</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="/user-login"><IconLogin2 /> Login</a>
+                                    <a href="/admin"><IconLogin2 /> Login</a>
                                 </li>
                             </ul>
                         </div>
@@ -44,14 +44,14 @@ const Header = () => {
                             <div className="main-navbar-right d-flex align-items-center justify-content-end position-relative">
                                 <nav className="main-navmenu ms-3 d-none d-xl-block">
                                     <ul className="d-flex align-itmes-center justify-content-end">
-                                        <li className="">
+                                        <li>
                                             <a href="javascript:void(0)">Home</a>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <a href="about-us.html">About Us</a>
                                         </li>
                                         <li className="has-submenu">
-                                            <a href="javascript:void(0)">Stock List<span className="ms-1 fs-xs float-end"><IconChevronDown /></span></a>
+                                            <a href="javascript:void(0)">Stock List<span className="ms-1 float-end"><IconChevronDown /></span></a>
                                             <ul className="submenu-double-line">
                                                 <li>
                                                     <h5>Brands</h5>
@@ -84,7 +84,7 @@ const Header = () => {
                                             </ul>
                                         </li>
                                         <li className="has-submenu">
-                                            <a href="javascript:void(0)">How to Buy<span className="ms-1 fs-xs float-end"><IconChevronDown /></span></a>
+                                            <a href="javascript:void(0)">How to Buy<span className="ms-1 float-end"><IconChevronDown /></span></a>
                                             <ul>
                                                 <li><a href="">Bizupon Auction</a></li>
                                                 <li><a href="">Auction Houses</a></li>
@@ -94,19 +94,19 @@ const Header = () => {
                                             </ul>
                                         </li>
                                         <li className="has-submenu">
-                                            <a href="javascript:void(0)">Auction<span className="ms-1 fs-xs float-end"><IconChevronDown /></span></a>
+                                            <a href="javascript:void(0)">Auction<span className="ms-1 float-end"><IconChevronDown /></span></a>
                                             <ul>
                                                 <li><a href="">By Stock</a></li>
                                                 <li><a href="">By Auction</a></li>
                                             </ul>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <a href="javascript:void(0)">Services</a>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <a href="javascript:void(0)">Blog</a>
                                         </li>
-                                        <li className="">
+                                        <li>
                                             <a href="javascript:void(0)">Video</a>
                                         </li>
                                     </ul>
