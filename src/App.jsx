@@ -7,6 +7,8 @@ import Home from "./pages/website/Home";
 import Auth from "./pages/admin/Auth";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
+import CarFilterForm from "./web-components/CarFilterForm";
+import ProductListPage from "./pages/website/ProductListPage";
 
 function App() {
   return (
@@ -15,25 +17,23 @@ function App() {
       {/* WEBSITE */}
       <Route element={<WebsiteLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/filter" element={<CarFilterForm />} />
+        <Route path="/ProductList" element={<ProductListPage />} />
       </Route>
 
-      {/* ADMIN AUTH ONLY */}
+      {/* ADMIN AUTH */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Auth />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Route>
 
-      {/* DIRECT LOGIN URL */}
+      {/* DIRECT LOGIN */}
       <Route path="/login" element={<AdminLayout />}>
         <Route index element={<Login />} />
       </Route>
 
-      {/* COMMON DASHBOARD */}
-      <Route path="/admin/dashboard" element={<AdminLayout />}>
-        <Route index element={<Dashboard />} />
-      </Route>
-
     </Routes>
   );
-} 
+}
 
 export default App;

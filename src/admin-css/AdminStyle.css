@@ -106,7 +106,7 @@ h1,h2,h3,h4,h5,h6{
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 11;
     width: 230px;
     height: 100%;
     border-right: dashed 1px #dbdbdb;
@@ -360,7 +360,17 @@ ul.user-menu li a img{
     transition: all ease 0.5s;
     /* overflow: hidden; */
 }
-.landing-card:hover{
+.card-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    cursor: pointer;
+}
+.card-content h6{
+    font-weight: 500;
+}
+.dashboard-card:hover{
     transform: scale(1.04);
     background:#f8f9fa;
     transition: all ease 0.5s;
@@ -477,7 +487,7 @@ ul.user-menu li a img{
 }
 .welcome-banner::after {
     content: "";
-    background:url(../admin-images/img-dropbox-bg.svg);
+    background:url('../admin-images/img-dropbox-bg.svg');
     position: absolute;
     top: 0;
     left: 0;
@@ -489,6 +499,15 @@ ul.user-menu li a img{
     background-size: 100%;
     background-repeat: no-repeat;
 }
+.welcome-banner p{
+    font-size: 16px;
+    font-size: 18px;
+    margin-right: 50px;
+    line-height: 1.6;
+}
+.welcome-banner .banner-content{
+    padding: 50px;
+}
 .welcome-banner .img-welcome-banner {
     display: flex;
     flex-direction: column;
@@ -499,7 +518,7 @@ ul.user-menu li a img{
     padding-right: 64px;
 }
 .welcome-banner .img-welcome-banner img {
-    width: 300px;
+    width: 400px;
 }
 
 .card .card-header {
@@ -1209,6 +1228,18 @@ main .signup-form {
     label.form-control{
         padding: .6rem .40rem;
     }
+    .welcome-banner .img-welcome-banner {
+        padding-right: 0;
+    }
+    .welcome-banner .banner-content {
+        padding: 20px;
+    }
+    .welcome-banner .banner-content h2{
+        font-size:26px;
+    }
+    .welcome-banner .banner-content p{
+        font-size:16px;
+    }
 }
 
 @media screen and (min-width: 1300px) {
@@ -1515,8 +1546,8 @@ main .signup-form {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #8fc97e;
-        border: 1px solid #8fc97e;
+        color: #40b81f;
+        border: 1px solid #40b81f;
         flex-shrink: 0;
     }
     .has-dropdown .dropdown-menu .dropdown-item-icon svg{
@@ -1552,10 +1583,10 @@ main .signup-form {
     /* Specialties & Services Grid Menu */
     .specialties-menu,
     .services-menu {
-        min-width: 580px!important;
+        min-width: 560px!important;
         grid-template-columns: repeat(2, 1fr);
         gap: 5px!important;
-        left: 25%!important;
+        left: 40%!important;
         transform: translateX(-25%) translateY(20px);
     }
 
@@ -1786,7 +1817,7 @@ main .signup-form {
     }
     .toc__navul li .subnav, .toc__navul li .subnav {
         columns: 3;
-        width: 760px;
+        width: 775px;
         padding: 10px;
     }
     .subnav {
