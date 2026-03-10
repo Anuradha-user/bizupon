@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "../web-components/Header";
-// import Footer from "../web-components/Footer";
+import Footer from "../web-components/Footer";
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 function WebsiteLayout() {
@@ -22,7 +22,7 @@ function WebsiteLayout() {
     <>
       <Header />
       <Outlet />
-      {/* <Footer /> */}
+      <Footer /> 
     </>
   );
 }

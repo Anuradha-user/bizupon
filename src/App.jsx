@@ -9,6 +9,7 @@ import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import CarFilterForm from "./web-components/CarFilterForm";
 import ProductListPage from "./pages/website/ProductListPage";
+import Counter from "./pages/website/Counter";
 
 function App() {
   return (
@@ -17,8 +18,9 @@ function App() {
       {/* WEBSITE */}
       <Route element={<WebsiteLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/counter" element={<Counter/>} />
         <Route path="/filter" element={<CarFilterForm />} />
-        <Route path="/ProductList" element={<ProductListPage />} />
+        <Route path="/product-list" element={<ProductListPage />} />
       </Route>
 
       {/* ADMIN AUTH */}

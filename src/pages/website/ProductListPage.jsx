@@ -1,149 +1,178 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import ProductFilters from "../../web-components/ProductFilters";
 import ProductListCard from "../../web-components/ProductListCard";
-import { IconLayoutGrid, IconList } from "@tabler/icons-react";
-import productsData from "../../data/carDatabase.json";
+import { IconChevronRight, IconLayoutGrid, IconList, IconChevronLeft} from "@tabler/icons-react";
 
 function ProductListPage() {
+
   const [searchParams] = useSearchParams();
 
+  const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
-  const [sortType, setSortType] = useState("");
-  const [view, setView] = useState("grid-view");
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [view, setView] = useState("grid-view");
+  const [sortType, setSortType] = useState("");
+
+  // PAGINATION
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 30;
+
+  // 🔥 FETCH PRODUCTS
   useEffect(() => {
-    const maker = searchParams.get("maker");
-    const brandParam = searchParams.get("brand"); // 👈 add this
-    const model = searchParams.get("model");
-    const fuel = searchParams.get("fuel");
-    const body = searchParams.get("body");
-    const minPrice = searchParams.get("minPrice");
-    const maxPrice = searchParams.get("maxPrice");
 
-    // final maker value (brand OR maker)
-    const finalMaker = maker || brandParam;
-
-    // ❌ no filters → error show
-    if (!finalMaker && !model && !fuel && !body && !minPrice && !maxPrice) {
-      setError("Please apply at least one filter");
-      setLoading(false);
-      return;
-    }
-
-    // ⏳ loader simulate (API future ready)
-    setTimeout(() => {
-      const filtered = productsData.filter(car => {
-        return (
-          (!finalMaker || car.brand === finalMaker) &&
-          (!model || car.title === model) &&
-          (!fuel || car.fuel === fuel) &&
-          (!body || car.type === body) &&
-          (!minPrice || car.price >= Number(minPrice)) &&
-          (!maxPrice || car.price <= Number(maxPrice))
-        );
+    fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")
+      .then(res => res.json())
+      .then(data => {
+        setAllProducts(data);
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load cars");
+        setLoading(false);
       });
 
-      setProducts(filtered);
-      setLoading(false);
-    }, 600);
+  }, []);
 
-  }, [searchParams]);
+  // 🔎 FILTER LOGIC
+  useEffect(() => {
 
+    const maker = searchParams.getAll("makers");
+    const models = searchParams.getAll("model");
+    const fuels = searchParams.getAll("fuel");
+    const bodies = searchParams.getAll("body");
+    const kms = Number(searchParams.get("kms")) || Infinity;
+
+    const minPrice = Number(searchParams.get("minPrice")) || 0;
+    const maxPrice = Number(searchParams.get("maxPrice")) || Infinity;
+
+    const filtered = allProducts.filter(car => {
+
+      return (
+        (maker.length === 0 || maker.includes(car.makers)) &&
+        (models.length === 0 || models.includes(car.productName)) &&
+        (fuels.length === 0 || fuels.includes(car.fuel)) &&
+        (bodies.length === 0 || bodies.includes(car.bodyType)) &&
+        car.price >= minPrice &&
+        car.price <= maxPrice &&
+        Number(car.mileage) <= kms
+      );
+
+    });
+
+    setProducts(filtered);
+    setCurrentPage(1); // reset page after filter
+
+  }, [searchParams, allProducts]);
+
+  // 🔃 SORTING
   const sortedProducts = [...products].sort((a, b) => {
     if (sortType === "low") return a.price - b.price;
     if (sortType === "high") return b.price - a.price;
-    if (sortType === "new") return b.year - a.year;
     return 0;
   });
 
+  // PAGINATION LOGIC
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+
+  const currentProducts = sortedProducts.slice(indexOfFirst, indexOfLast);
+
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+
   return (
+
     <div className="product-list">
       <div className="container">
         <div className="row">
 
-          <div className="col-lg-3 col-md-5 col-12">
-            {/* sidebar later */}
+          {/* FILTER */}
+          <div className="col-lg-3 col-md-4">
+            <ProductFilters />
           </div>
 
-          <div className="col-lg-9 col-md-7 col-12">
+          {/* LIST */}
+          <div className="col-lg-9 col-md-8">
             <div className="car-listing-block">
 
-              {/* ❌ ERROR UI */}
-              {error && (
-                <div className="alert alert-danger mt-4">
-                  {error}
-                </div>
-              )}
+              {error && <div className="alert alert-danger">{error}</div>}
 
-              {/* ⏳ LOADER */}
-              {loading && !error && (
+              {loading && (
                 <div className="text-center py-5">
-                  <div className="spinner-border text-success" role="status"></div>
+                  <div className="spinner-border text-success"></div>
                   <p className="mt-2">Loading cars...</p>
                 </div>
               )}
 
-              {/* ✅ RESULT UI */}
-              {!loading && !error && (
+              {!loading && (
                 <>
                   <div className="carListingTopBar">
-                    <div className="searchResult">
-                      Search Result <span>({sortedProducts.length})</span>
-                    </div>
+                    <div>Search Result <strong>({sortedProducts.length})</strong></div>
 
-                    <div className="carListing-rightBar">
-                      <div className="viewBtn">
-                        <button
-                          className={`viewIcon ${view === "list-view" ? "active" : ""}`}
-                          onClick={() => setView("list-view")}
-                        >
-                          <IconList size={24} />
-                        </button>
+                    <div className="d-flex gap-2">
+                      <button className={`viewIcon ${view === "list-view" ? "active" : ""}`}
+                        onClick={() => setView("list-view")} >
+                        <IconList size={22} />
+                      </button>
 
-                        <button
-                          className={`viewIcon ${view === "grid-view" ? "active" : ""}`}
-                          onClick={() => setView("grid-view")}
-                        >
-                          <IconLayoutGrid size={24} />
-                        </button>
-                      </div>
+                      <button className={`viewIcon ${view === "grid-view" ? "active" : ""}`}
+                        onClick={() => setView("grid-view")} >
+                        <IconLayoutGrid size={22} />
+                      </button>
 
-                      <select
-                        className="form-select form-select-sm"
+                      <select className="form-select form-select-sm"
                         value={sortType}
-                        onChange={(e) => setSortType(e.target.value)}
-                      >
+                        onChange={(e) => setSortType(e.target.value)} >
+
                         <option value="">Sort by</option>
-                        <option value="low">Price-Low to High</option>
-                        <option value="high">Price-High to Low</option>
-                        <option value="new">Newest First</option>
+                        <option value="low">Price Low → High</option>
+                        <option value="high">Price High → Low</option>
+
                       </select>
                     </div>
                   </div>
 
-                  {/* ❌ NO RESULT */}
                   {sortedProducts.length === 0 ? (
                     <div className="text-center py-5">
-                      <h4>No cars found</h4>
-                      <p>Try changing your filters</p>
+                      <h4>No Cars Found</h4>
+                      <p>Try changing filters</p>
                     </div>
                   ) : (
-                    <div className={`carlisting-contentArea ${view}`}>
-                      <ProductListCard products={sortedProducts} />
-                    </div>
+                    <>
+                      <div className={`carlisting-contentArea ${view}`}>
+                        <ProductListCard products={currentProducts} />
+                      </div>
+
+                      {/* PAGINATION */}
+                      <div className="pagination">
+                        <button disabled={currentPage === 1}
+                          onClick={() => setCurrentPage(currentPage - 1)}
+                          className="btn btn-sm btn-dark me-3"
+                        ><IconChevronLeft/>
+                        </button>
+                        <span>Page {currentPage} of {totalPages}</span>
+                        <button disabled={currentPage === totalPages}
+                          onClick={() => setCurrentPage(currentPage + 1)}
+                          className="btn btn-sm btn-dark ms-3"><IconChevronRight/>
+                          </button>
+                      </div>
+                    </>
                   )}
+
                 </>
               )}
-
             </div>
           </div>
-
         </div>
       </div>
     </div>
+
   );
+
 }
 
 export default ProductListPage;

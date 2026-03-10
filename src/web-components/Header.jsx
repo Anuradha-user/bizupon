@@ -1,6 +1,7 @@
 import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan } from '@tabler/icons-react'
 import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
+import { Link } from "react-router-dom";
 
 const Header = () => {
 
@@ -8,7 +9,7 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 50) {
         setIsSticky(true);
       } else {
         setIsSticky(false);
@@ -30,23 +31,23 @@ const Header = () => {
                     <div className="col-lg-4">
                         <div className="topbar-info d-none d-lg-block">
                             <ul className="social-list">
-                                <li><a href="#"><IconBrandFacebook /></a></li>
-                                <li><a href="#"><IconBrandX /></a></li>
-                                <li><a href="#"><IconBrandInstagram /></a></li>
-                                <li><a href="#"><IconBrandWhatsapp /></a></li>
+                                <li><Link to="#"><IconBrandFacebook /></Link></li>
+                                <li><Link to="#"><IconBrandX /></Link></li>
+                                <li><Link to="#"><IconBrandInstagram /></Link></li>
+                                <li><Link to="#"><IconBrandWhatsapp /></Link></li>
                             </ul>
                         </div>
                     </div>
                     <div className="col-lg-8">
                         <ul className="d-flex align-items-center justify-content-end topbar-info-right">
                             <li className="nav-item">
-                                <a href="#"><IconTruckDelivery /> Logistics</a>
+                                <Link to="#"><IconTruckDelivery /> Logistics</Link>
                             </li>
                             <li className="nav-item">
-                                <a href="/admin"><IconUserScan /> Register</a>
+                                <Link to="/admin"><IconUserScan /> Register</Link>
                             </li>
                             <li className="nav-item">
-                                <a href="/admin"><IconLogin2 /> Login</a>
+                                <Link to="/admin"><IconLogin2 /> Login</Link>
                             </li>
                         </ul>
                     </div>
@@ -57,81 +58,81 @@ const Header = () => {
             <div className="main-navbar">
                 <div className="row align-items-center">
                     <div className="col-xxl-2 col-xl-3 col-md-3 col-7">
-                        <a href="/" className="logo"><img src={logo} alt="Bizupon Logo" className="img-fluid" /></a>
+                        <Link to="/" className="logo"><img src={logo} alt="Bizupon Logo" className="img-fluid" /></Link>
                     </div>
                     <div className="col-xxl-10 col-xl-9 col-md-9 col-5">
                         <div className="main-navbar-right d-flex align-items-center justify-content-end position-relative">
                             <nav className="main-navmenu ms-3 d-none d-xl-block">
                                 <ul className="d-flex align-itmes-center justify-content-end">
                                     <li>
-                                        <a href="javascript:void(0)">Home</a>
+                                        <Link to="/">Home</Link>
                                     </li>
                                     <li>
-                                        <a href="about-us.html">About Us</a>
+                                        <Link to="/counter">About Us</Link>
                                     </li>
                                     <li className="has-submenu">
-                                        <a href="javascript:void(0)">Stock List<span className="ms-1 float-end"><IconChevronDown /></span></a>
+                                        <Link to="/product-list">Stock List<span className="ms-1 float-end"><IconChevronDown /></span></Link>
                                         <ul className="submenu-double-line">
                                             <li>
                                                 <h5>Brands</h5>
-                                                <a href="">Toyota</a>
-                                                <a href="">Nissan</a>
-                                                <a href="">Honda</a>
-                                                <a href="">Suzuki</a>
-                                                <a href="">Subaru</a>
-                                                <a href="">Mitsubishi</a>
-                                                <a href="">Volkswagen</a>
-                                                <a href="">Audi</a>
-                                                <a href="">Mercedes</a>
-                                                <a href="">Land Rover</a>
-                                                <a href="">Ford</a>
+                                                <Link to="/product-list?makers=Toyota">Toyota</Link>
+                                                <Link to="/product-list?makers=Nissan">Nissan</Link>
+                                                <Link to="/product-list?makers=Honda">Honda</Link>
+                                                <Link to="/product-list?makers=Suzuki">Suzuki</Link>
+                                                <Link to="/product-list?makers=Subaru">Subaru</Link>
+                                                <Link to="/product-list?makers=Mitsubishi">Mitsubishi</Link>
+                                                <Link to="/product-list?makers=Volkswagen">Volkswagen</Link>
+                                                <Link to="/product-list?makers=Audi">Audi</Link>
+                                                <Link to="/product-list?makers=Mercedes">Mercedes</Link>
+                                                <Link to="/product-list?makers=Land Rover">Land Rover</Link>
+                                                <Link to="/product-list?makers=Ford">Ford</Link>
                                             </li>
                                             <li>
                                                 <h5>Body Type</h5>
-                                                <a href="">Sedan</a>
-                                                <a href="">Coupe</a>
-                                                <a href="">Hatchback</a>
-                                                <a href="">Station Wagon</a>
-                                                <a href="">SUV</a>
-                                                <a href="">Pick Up</a>
-                                                <a href="">Van</a>
-                                                <a href="">Wagon</a>
-                                                <a href="">Convertible</a>
-                                                <a href="">Bus</a>
-                                                <a href="">Truck</a>
+                                                <Link to="/product-list?body=Sedan">Sedan</Link>
+                                                <Link to="/product-list?body=Coupe">Coupe</Link>
+                                                <Link to="/product-list?body=Hatchback">Hatchback</Link>
+                                                <Link to="/product-list?body=Station Wagon">Station Wagon</Link>
+                                                <Link to="/product-list?body=SUV">SUV</Link>
+                                                <Link to="/product-list?body=Pick Up">Pick Up</Link>
+                                                <Link to="/product-list?body=Van">Van</Link>
+                                                <Link to="/product-list?body=Wagon">Wagon</Link>
+                                                <Link to="/product-list?body=Convertible">Convertible</Link>
+                                                <Link to="/product-list?body=Bus">Bus</Link>
+                                                <Link to="/product-list?body=Truck">Truck</Link>
                                             </li>
                                         </ul>
                                     </li>
                                     <li className="has-submenu">
-                                        <a href="javascript:void(0)">How to Buy<span className="ms-1 float-end"><IconChevronDown /></span></a>
+                                        <Link to="javascript:void(0)">How to Buy<span className="ms-1 float-end"><IconChevronDown /></span></Link>
                                         <ul>
-                                            <li><a href="">Bizupon Auction</a></li>
-                                            <li><a href="">Auction Houses</a></li>
-                                            <li><a href="">Auction Schedule</a></li>
-                                            <li><a href="">Auction Guide</a></li>
-                                            <li><a href="">Auction Service</a></li>
+                                            <li><Link to="">Bizupon Auction</Link></li>
+                                            <li><Link to="">Auction Houses</Link></li>
+                                            <li><Link to="">Auction Schedule</Link></li>
+                                            <li><Link to="">Auction Guide</Link></li>
+                                            <li><Link to="">Auction Service</Link></li>
                                         </ul>
                                     </li>
                                     <li className="has-submenu">
-                                        <a href="javascript:void(0)">Auction<span className="ms-1 float-end"><IconChevronDown /></span></a>
+                                        <Link to="javascript:void(0)">Auction<span className="ms-1 float-end"><IconChevronDown /></span></Link>
                                         <ul>
-                                            <li><a href="">By Stock</a></li>
-                                            <li><a href="">By Auction</a></li>
+                                            <li><Link to="">By Stock</Link></li>
+                                            <li><Link to="">By Auction</Link></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Services</a>
+                                        <Link to="javascript:void(0)">Services</Link>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Blog</a>
+                                        <Link to="javascript:void(0)">Blog</Link>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">Video</a>
+                                        <Link to="javascript:void(0)">Video</Link>
                                     </li>
                                 </ul>
                             </nav>
                             <div className="main-header-contact ms-7 position-relative d-none d-lg-flex d-xl-none d-xxl-flex">
-                                <a href="tel:+818021898080" className="d-flex align-items-center">
+                                <Link to="tel:+818021898080" className="d-flex align-items-center">
                                     <span className="icon d-inline-flex rounded-circle justify-content-center align-items-center bg-secondary-light">
                                         <IconPhone />
                                     </span>
@@ -139,7 +140,7 @@ const Header = () => {
                                         <p className="text-muted">Phone</p>
                                         <h6 className="mb-0 mt-1">+81 80-2189-8080</h6>
                                     </div>
-                                </a>
+                                </Link>
                             </div>
                             <button className="menu-offcanvas-btn offcanvas-toggle d-none">
                                 <IconMenu2 />

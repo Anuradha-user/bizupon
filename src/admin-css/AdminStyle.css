@@ -757,11 +757,14 @@ ul.user-menu li a img{
     border-color: #54be3d;
 }
 .btn-primary:hover,
-.btn-primary:active{
+.btn-primary:active,
+.btn:focus-visible{
     background-color: #42a12d!important;
     border-color: #42a12d!important;
 }
-
+.btn:focus-visible{
+    box-shadow:0 0 0 0.25rem  rgba(102, 255, 153, 0.3);
+}
 
 /*--- login ---*/
 .auth-logo{
@@ -1182,6 +1185,13 @@ main .signup-form {
     }
 }
 
+@media (min-width: 1400px) {
+    .col-xl-3 {
+        flex: 0 0 auto!important;
+        width: 25%!important;
+    }
+}
+
 /*--L-laptops--*/
 @media screen and (max-width: 1440px){
     main .wrapper{
@@ -1251,6 +1261,13 @@ main .signup-form {
     }
     li:hover .subnav:before {
         width: 6%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-4 {
+        flex: 0 0 auto;
+        width: 33.33333333%;
     }
 }
 

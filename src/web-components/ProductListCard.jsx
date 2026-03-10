@@ -1,52 +1,46 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function ProductListCard({ products }) {
-  return (
-    <>
-      {products?.map((product) => (
-        <div className="productCard" key={product.id}>
-          <div className="imgThumb">
-            <a href="#">
-              <img src={product.imageUrl} alt={product.title} className="img-fluid"
-              />
-            </a>
-          </div>
 
+  return (
+
+    <>
+      {products.map((product) => (
+        <div className="productCard" key={product.productId}>
+          <div className="imgThumb">
+            <Link to="#">
+              <img
+                src={product.image}
+                alt={product.productName}
+                className="img-fluid"
+              />
+            </Link>
+          </div>
           <div className="product-content">
             <div className="d-flex justify-content-between">
-              <p className="brand">{product.brand}</p>
-              <p className="product-ID">BIZ ID: {product.bizId}</p>
+              <p className="brand">{product.makers}</p>
+              <p>BIZ ID: {product.productId}</p>
             </div>
-
-            <h6 className="title">{product.title}</h6>
-
+            <h6 className="title">{product.productName}</h6>
             <div className="productInfo">
-              <div className="coloumn">
-                {/* <p>Kilometers:</p> */}
-                <p>{product.kilometers} km</p>
-              </div>
-
-              <div className="coloumn">
-                <p>{product.year}</p>
-              </div>
-
-              <div className="coloumn">
-                <p>{product.fuelType}</p>
-              </div>
+              <p>{product.mileage} km</p>
+              <p>{product.registrationdate}</p>
+              <p>{product.fuel}</p>
             </div>
           </div>
-
           <div className="line"></div>
-
           <div className="ProductCard-price">
             <button className="btn theme-btn w-100">
-              ¥{product.price}
+              ${product.price}
             </button>
           </div>
         </div>
       ))}
     </>
+
   );
+
 }
 
 export default ProductListCard;
