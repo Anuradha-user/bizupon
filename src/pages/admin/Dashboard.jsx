@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import SidebarMenu from '../../admin-components/SidebarMenu';
-import HeaderNavbar from '../../admin-components/HeaderNavbar';
 import Preloader from "../../admin-components/Preloader";
 import AdminBanner from "../../admin-components/AdminBanner";
 import DashboardCard from "../../admin-components/DashboardCard";
+import { useNavigate } from "react-router-dom";
 
 import portImg from '../../admin-images/port-images.png';
 import yardImg from '../../admin-images/yard-out.png';
@@ -15,9 +14,10 @@ import reportImg from '../../admin-images/yard-out-report.png';
 
 function Dashboard() {
 
+    const navigate = useNavigate();
     const cards = [
-        { title: "Add Port Images", icon: portImg },
-        { title: "Add Yard Out", icon: yardImg },
+        { title: "Add Port Images", icon: portImg, path: "/admin/add-port-images" },
+        { title: "Add Yard Out", icon: yardImg, path: "/admin/add-yard-out" },
         { title: "Yard Lookup Confirmation", icon: confirmImg },
         { title: "Yard Lookup Cancel", icon: cancelImg },
         { title: "Document Confirmation", icon: documentImg },
@@ -44,24 +44,20 @@ function Dashboard() {
 
         return (
             <>
-                <SidebarMenu sidebarHidden={sidebarHidden} />
-                <div className={`content-area ${sidebarHidden ? "content-area-full" : ""}`}>
-                    <HeaderNavbar onToggleSidebar={toggleSidebar} />
-                    <div className="content-block">
-                        <div className="container-fluid">
-                            <AdminBanner />
-                            <div className="row">
-                                {cards.map((card, index) => (
-                                    <DashboardCard
-                                    key={index}
-                                    title={card.title}
-                                    icon={card.icon}
-                                    onClick={() => console.log(card.title)}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
+                <AdminBanner />
+                <div className="row">
+                    {cards.map((card, index) => (
+                        <DashboardCard
+                            key={index}
+                            title={card.title}
+                            icon={card.icon}
+                            onClick={() => {
+                                if (card.path) {
+                                    navigate(card.path);
+                                }
+                            }}
+                        />
+                    ))}
                 </div>
             </>
         )

@@ -4,11 +4,11 @@ import favicon from '../web-images/favicon.png';
 function Preloader() {
   return (
     <div id="preloader">
-        <div class="preloader">
-            <div class="pre loader">
-                <div class="circle"></div>
+        <div className="preloader">
+            <div className="pre loader">
+                <div className="circle"></div>
             </div>
-            <div class="loaderLogo">
+            <div className="loaderLogo">
                 <img src={favicon} alt="" />
             </div>
         </div>

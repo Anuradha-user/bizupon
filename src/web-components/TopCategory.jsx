@@ -12,11 +12,11 @@ function TopCategory() {
     ];
 
   return (
-    <section class="category">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-title text-center">
+    <section className="category">
+        <div className="container">
+            <div className="row">
+                <div className="col-lg-12">
+                    <div className="section-title text-center">
                         <h6>Top Category</h6>
                         <h1>Car's For Everyone</h1>
                     </div>

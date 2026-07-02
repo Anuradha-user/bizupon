@@ -23,11 +23,11 @@ function Footer() {
                         <h4 className="widget-title">Company</h4>
                         <div className="widget-content">
                             <ul className="user-links">
-                                <li><a href="#"><IconArrowRightDashed /> About Us</a></li>
+                                <li><a href="/about-us"><IconArrowRightDashed /> About Us</a></li>
                                 <li><a href="#"><IconArrowRightDashed /> How to Buy</a></li>
                                 <li><a href="#"><IconArrowRightDashed /> Services</a></li>
                                 <li><a href="#"><IconArrowRightDashed /> FAQs</a></li>
-                                <li><a href="#"><IconArrowRightDashed /> Blogs</a></li>
+                                <li><a href="/blogs"><IconArrowRightDashed /> Blogs</a></li>
                                 <li><a href="#"><IconArrowRightDashed /> Contact Us</a></li>
                             </ul>
                         </div>

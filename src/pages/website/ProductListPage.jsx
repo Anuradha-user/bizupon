@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import ProductFilters from "../../web-components/ProductFilters";
 import ProductListCard from "../../web-components/ProductListCard";
-import { IconChevronRight, IconLayoutGrid, IconList, IconChevronLeft} from "@tabler/icons-react";
+import { IconChevronRight, IconLayoutGrid, IconList, IconChevronLeft } from "@tabler/icons-react";
 
 function ProductListPage() {
 
-  const [searchParams] = useSearchParams();
-
   const [allProducts, setAllProducts] = useState([]);
-  const [products, setProducts] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const [view, setView] = useState("grid-view");
   const [sortType, setSortType] = useState("");
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState("");
 
-  // PAGINATION
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 30;
 
@@ -28,7 +25,6 @@ function ProductListPage() {
       .then(res => res.json())
       .then(data => {
         setAllProducts(data);
-        setProducts(data);
         setLoading(false);
       })
       .catch(() => {
@@ -38,51 +34,68 @@ function ProductListPage() {
 
   }, []);
 
-  // 🔎 FILTER LOGIC
-  useEffect(() => {
+  // 🔎 FILTER + SEARCH
+  const filteredProducts = useMemo(() => {
 
-    const maker = searchParams.getAll("makers");
-    const models = searchParams.getAll("model");
-    const fuels = searchParams.getAll("fuel");
-    const bodies = searchParams.getAll("body");
-    const kms = Number(searchParams.get("kms")) || Infinity;
+  const maker = searchParams.getAll("makers");
+  const models = searchParams.getAll("model");
+  const fuels = searchParams.getAll("fuel");
+  const transmissions = searchParams.getAll("transmission");
 
-    const minPrice = Number(searchParams.get("minPrice")) || 0;
-    const maxPrice = Number(searchParams.get("maxPrice")) || Infinity;
+  const kms = Number(searchParams.get("kms")) || Infinity;
+  const cc = Number(searchParams.get("cc")) || Infinity;
 
-    const filtered = allProducts.filter(car => {
+  const minPrice = Number(searchParams.get("minPrice")) || 0;
+  const maxPrice = Number(searchParams.get("maxPrice")) || Infinity;
 
-      return (
-        (maker.length === 0 || maker.includes(car.makers)) &&
-        (models.length === 0 || models.includes(car.productName)) &&
-        (fuels.length === 0 || fuels.includes(car.fuel)) &&
-        (bodies.length === 0 || bodies.includes(car.bodyType)) &&
-        car.price >= minPrice &&
-        car.price <= maxPrice &&
-        Number(car.mileage) <= kms
-      );
+  return allProducts.filter(car => {
 
-    });
+  const engine = Number(car.cc) || 0;
+  const mileage = Number(car.mileage) || 0;
 
-    setProducts(filtered);
-    setCurrentPage(1); // reset page after filter
-
-  }, [searchParams, allProducts]);
-
-  // 🔃 SORTING
-  const sortedProducts = [...products].sort((a, b) => {
-    if (sortType === "low") return a.price - b.price;
-    if (sortType === "high") return b.price - a.price;
-    return 0;
+  return (
+      (maker.length === 0 || maker.includes(car.makers)) &&
+      (models.length === 0 || models.includes(car.productName)) &&
+      (fuels.length === 0 || fuels.includes(car.fuel)) &&
+      (transmissions.length === 0 || transmissions.includes(car.transmission)) &&
+      engine <= cc &&
+      Number(car.price) >= minPrice &&
+      Number(car.price) <= maxPrice &&
+      mileage <= kms &&
+      (search === "" || car.productId.toString().includes(search))
+    );
   });
 
-  // PAGINATION LOGIC
-  const indexOfLast = currentPage * productsPerPage;
-  const indexOfFirst = indexOfLast - productsPerPage;
+  }, [allProducts, searchParams, search]);
 
-  const currentProducts = sortedProducts.slice(indexOfFirst, indexOfLast);
+  // 🔃 SORTING
+  const sortedProducts = useMemo(() => {
+
+    const sorted = [...filteredProducts];
+
+    if (sortType === "low") return sorted.sort((a, b) => a.price - b.price);
+    if (sortType === "high") return sorted.sort((a, b) => b.price - a.price);
+
+    return sorted;
+
+  }, [filteredProducts, sortType]);
+
+  // 📄 PAGINATION
+  const currentProducts = useMemo(() => {
+
+    const indexOfLast = currentPage * productsPerPage;
+    const indexOfFirst = indexOfLast - productsPerPage;
+
+    return sortedProducts.slice(indexOfFirst, indexOfLast);
+
+  }, [sortedProducts, currentPage]);
 
   const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+
+  // reset page when filter/search change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchParams, search]);
 
   return (
 
@@ -95,7 +108,7 @@ function ProductListPage() {
             <ProductFilters />
           </div>
 
-          {/* LIST */}
+          {/* PRODUCT LIST */}
           <div className="col-lg-9 col-md-8">
             <div className="car-listing-block">
 
@@ -111,22 +124,39 @@ function ProductListPage() {
               {!loading && (
                 <>
                   <div className="carListingTopBar">
-                    <div>Search Result <strong>({sortedProducts.length})</strong></div>
+
+                    <div>
+                      Search Result <strong>({sortedProducts.length})</strong>
+                    </div>
 
                     <div className="d-flex gap-2">
-                      <button className={`viewIcon ${view === "list-view" ? "active" : ""}`}
-                        onClick={() => setView("list-view")} >
+                      <button
+                        className={`viewIcon ${view === "list-view" ? "active" : ""}`}
+                        onClick={() => setView("list-view")}
+                      >
                         <IconList size={22} />
                       </button>
 
-                      <button className={`viewIcon ${view === "grid-view" ? "active" : ""}`}
-                        onClick={() => setView("grid-view")} >
+                      <button
+                        className={`viewIcon ${view === "grid-view" ? "active" : ""}`}
+                        onClick={() => setView("grid-view")}
+                      >
                         <IconLayoutGrid size={22} />
                       </button>
 
-                      <select className="form-select form-select-sm"
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by Stock ID"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                      />
+
+                      <select
+                        className="form-select form-select-sm"
                         value={sortType}
-                        onChange={(e) => setSortType(e.target.value)} >
+                        onChange={(e) => setSortType(e.target.value)}
+                      >
 
                         <option value="">Sort by</option>
                         <option value="low">Price Low → High</option>
@@ -137,36 +167,51 @@ function ProductListPage() {
                   </div>
 
                   {sortedProducts.length === 0 ? (
+
                     <div className="text-center py-5">
                       <h4>No Cars Found</h4>
                       <p>Try changing filters</p>
                     </div>
+
                   ) : (
+
                     <>
                       <div className={`carlisting-contentArea ${view}`}>
-                        <ProductListCard products={currentProducts} />
+                        <ProductListCard products={currentProducts} view={view} />
                       </div>
 
                       {/* PAGINATION */}
                       <div className="pagination">
-                        <button disabled={currentPage === 1}
+
+                        <button
+                          disabled={currentPage === 1}
                           onClick={() => setCurrentPage(currentPage - 1)}
                           className="btn btn-sm btn-dark me-3"
-                        ><IconChevronLeft/>
+                        >
+                          <IconChevronLeft />
                         </button>
+
                         <span>Page {currentPage} of {totalPages}</span>
-                        <button disabled={currentPage === totalPages}
+
+                        <button
+                          disabled={currentPage === totalPages}
                           onClick={() => setCurrentPage(currentPage + 1)}
-                          className="btn btn-sm btn-dark ms-3"><IconChevronRight/>
-                          </button>
+                          className="btn btn-sm btn-dark ms-3"
+                        >
+                          <IconChevronRight />
+                        </button>
+
                       </div>
+
                     </>
                   )}
 
                 </>
               )}
+
             </div>
           </div>
+
         </div>
       </div>
     </div>

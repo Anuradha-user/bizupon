@@ -1,7 +1,19 @@
+import React, { useEffect, useState } from "react";
 import { IconArrowBigRight, IconArrowNarrowRight, IconChevronDown, IconLockPassword, IconLogout, IconMenu2, IconX } from '@tabler/icons-react'
 import userImg from '../admin-images/user.png'
+import { Link } from 'react-router-dom'
 
 function HeaderNavbar({ onToggleSidebar }) {
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        setUser(JSON.parse(storedUser));
+    }
+    }, []);
+
   return (
     <header className="header">
         <div className="header-wrapper">
@@ -17,7 +29,7 @@ function HeaderNavbar({ onToggleSidebar }) {
             </button>
             <div className="header-container">
                 <input type="checkbox" id="nav-toggle" className="nav-toggle" aria-label="Toggle navigation menu"/>
-                <label for="nav-toggle" className="nav-toggle-label">
+                <label htmlFor="nav-toggle" className="nav-toggle-label">
                     <IconMenu2  className="icon-menu" />
                     <IconX  className="icon-close" />
                 </label>
@@ -27,12 +39,12 @@ function HeaderNavbar({ onToggleSidebar }) {
                         <li className="has-dropdown">
                             <input type="checkbox" id="toggle-invoice" className="dropdown-toggle" />
                             <div className="link-wrapper">
-                                <a href="#">Invoice Management</a>
-                                <label className="dropdown-icon" for="toggle-invoice"><IconChevronDown /></label>
+                                <Link to="#">Invoice Management</Link>
+                                <label className="dropdown-icon" htmlFor="toggle-invoice"><IconChevronDown /></label>
                             </div>
                             <ul className="dropdown-menu services-menu">
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -42,10 +54,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -55,10 +67,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -68,10 +80,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -81,10 +93,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -94,10 +106,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -107,10 +119,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -120,10 +132,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -133,10 +145,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -146,10 +158,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -159,10 +171,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -172,10 +184,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -185,19 +197,19 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>
                         <li className="has-dropdown">
                             <input type="checkbox" id="toggle-reports" className="dropdown-toggle" />
                             <div className="link-wrapper">
-                                <a href="#">Reports</a>
-                                <label className="dropdown-icon" for="toggle-reports"><IconChevronDown /></label>
+                                <Link to="#">Reports</Link>
+                                <label className="dropdown-icon" htmlFor="toggle-reports"><IconChevronDown /></label>
                             </div>
                             <ul className="dropdown-menu services-menu">
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -207,10 +219,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -220,10 +232,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -233,10 +245,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -246,10 +258,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -259,10 +271,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -272,10 +284,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -285,10 +297,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -298,10 +310,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -311,10 +323,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -324,10 +336,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -337,10 +349,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -350,19 +362,19 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>
                         <li className="has-dropdown">
                             <input type="checkbox" id="toggle-other-reports" className="dropdown-toggle" />
                             <div className="link-wrapper">
-                                <a href="#">Other Reports</a>
-                                <label className="dropdown-icon" for="toggle-other-reports"><IconChevronDown /></label>
+                                <Link to="#">Other Reports</Link>
+                                <label className="dropdown-icon" htmlFor="toggle-other-reports"><IconChevronDown /></label>
                             </div>
                             <ul className="dropdown-menu services-menu">
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -372,10 +384,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -385,10 +397,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -398,10 +410,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -411,10 +423,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -424,10 +436,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -437,10 +449,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -450,10 +462,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -463,10 +475,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -476,10 +488,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -489,10 +501,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -502,10 +514,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -515,19 +527,19 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>
                         <li className="has-dropdown">
                             <input type="checkbox" id="toggle-account" className="dropdown-toggle" />
                             <div className="link-wrapper">
-                                <a href="#">Account Reports</a>
-                                <label className="dropdown-icon" for="toggle-account"><IconChevronDown /></label>
+                                <Link to="#">Account Reports</Link>
+                                <label className="dropdown-icon" htmlFor="toggle-account"><IconChevronDown /></label>
                             </div>
                             <ul className="dropdown-menu services-menu">
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -537,10 +549,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -550,10 +562,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -563,10 +575,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -576,10 +588,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -589,10 +601,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -602,10 +614,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -615,10 +627,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -628,10 +640,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -641,10 +653,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -654,10 +666,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -667,10 +679,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -680,19 +692,19 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>
                         <li className="has-dropdown">
                             <input type="checkbox" id="toggle-history" className="dropdown-toggle" />
                             <div className="link-wrapper">
-                                <a href="#">History</a>
-                                <label className="dropdown-icon" for="toggle-history"><IconChevronDown /></label>
+                                <Link to="#">History</Link>
+                                <label className="dropdown-icon" htmlFor="toggle-history"><IconChevronDown /></label>
                             </div>
                             <ul className="dropdown-menu services-menu">
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -702,10 +714,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -715,10 +727,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -728,10 +740,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -741,10 +753,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -754,10 +766,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -767,10 +779,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -780,10 +792,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -793,10 +805,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -806,10 +818,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -819,10 +831,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -832,10 +844,10 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a href="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         <div className="dropdown-item-icon">
                                             <IconArrowBigRight />
                                         </div>
@@ -845,7 +857,7 @@ function HeaderNavbar({ onToggleSidebar }) {
                                         <div className="dropdown-item-arrow">
                                             <IconArrowNarrowRight />
                                         </div>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </li>
@@ -853,18 +865,20 @@ function HeaderNavbar({ onToggleSidebar }) {
                 </nav>
             </div>
             <ul className="user-menu">
-                <li className="dropdown topbar-item">
+                <li className="topbar-item">
                     <button className="dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="false">
                         <img src={userImg} alt="" className="thumb-md rounded-circle" />
-                        <h5 id="fullName">MAKAROV DMITRIY ALEKSANDROVICH</h5>
+                        <h5 id="fullName">{user ? user.fullName || user.username || user.email : "User"}</h5>
                     </button>
                     <div className="dropdown-menu stop dropdown-menu-end dropdown-lg py-0">
                         <div className="dropdown-item-text">
                             <h6>Welcome</h6>
-                            <h5>Sanjesh Sharma</h5>
+                            <h5>{user ? user.fullName || user.username || user.email : "Guest"}</h5>
                         </div>
-                        <a href="" className="dropdown-item"><IconLockPassword /> Change Password</a>
-                        <a href="/login" className="dropdown-item text-danger"><IconLogout className="text-danger" /> Logout</a>
+                        <Link to="/change-password" className="dropdown-item"><IconLockPassword /> Change Password</Link>
+                        <Link to="/login" className="dropdown-item text-danger" onClick={() => {
+          localStorage.removeItem("user");
+        }}><IconLogout className="text-danger" /> Logout</Link>
                     </div>
                 </li>
             </ul>

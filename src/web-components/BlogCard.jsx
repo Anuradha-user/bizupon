@@ -1,18 +1,40 @@
-import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { IconArrowNarrowRight, IconArrowUpRight, IconCalendarEvent, IconUser } from "@tabler/icons-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
-function BlogCard({ photo }) {
+function BlogCard({ blog }) {
+
+  const imageBaseUrl = "https://www.bizupon.com/blogsimages/";
+
   return (
     <article className="blog-card">
       <div className="thumbnail overflow-hidden">
-        <img src={photo.url} alt={photo.title} className="img-fluid w-100" />
+        <Link to={`/blog/${blog.blogId}`}>
+          <img 
+            src={blog.flag ? imageBaseUrl + blog.flag : "/no-image.png"}
+            alt={blog.blogTitle}
+            className="img-fluid w-100"
+          />
+        </Link>
       </div>
+
       <div className="blog-card-content">
-        <h4 className="mb-2 blog-heading">{photo.title}</h4>
-        <p className="blog-desc">Album ID: {photo.title}</p>
-        <a href="" target="_blank" className="read-more">
-          Read More <IconArrowNarrowRight />
-        </a>
+        <div className="blog-meta">
+          <span><IconUser /> {blog.userName}</span>
+          <span><IconCalendarEvent /> {blog.date}</span>
+        </div>
+
+        <h4 className="mb-2 blog-heading">
+          <Link to={`/blog/${blog.blogId}`}>
+            {blog.blogTitle}
+          </Link>
+        </h4>
+
+        <p className="blog-desc">{blog.details}</p>
+
+        <Link to={`/blog/${blog.blogId}`} className="read-more">
+          Read More <IconArrowUpRight />
+        </Link>
       </div>
     </article>
   );

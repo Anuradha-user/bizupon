@@ -11,7 +11,7 @@ function WhyUs() {
                         <h6>Why Choose Us</h6>
                         <h1>We are Dedicated to Provide<br/>
                             <span>Quality Service</span></h1>
-                        <p>Lorem ipsum dolor amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore et dolore magna aliqua enim ad minim veniamquis</p>
+                        <p>Our experienced team works hard to ensure a smooth, transparent, and reliable experience.</p>
                     </div>
                     <img src={whyus} className="img-fluid mt-5" alt="why choose us" />
                 </div>
@@ -25,7 +25,7 @@ function WhyUs() {
                                 </div>
                                 <div className="why-content">
                                     <h2>Best Quality Cars</h2>
-                                    <p>Lorem ipsum dolor amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore et dolore magna aliqua enim ad minim veniamquis</p>
+                                    <p>Discover a wide range of high-quality cars designed for performance, comfort, and reliability.</p>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@ function WhyUs() {
                                 </div>
                                 <div className="why-content">
                                     <h2>Wide Range of Brands</h2>
-                                    <p>Lorem ipsum dolor amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore et dolore magna aliqua enim ad minim veniamquis</p>
+                                    <p>From reliable everyday vehicles to premium models, we offer something for everyone.</p>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@ function WhyUs() {
                                 </div>
                                 <div className="why-content">
                                     <h2>Reasonable Price</h2>
-                                    <p>Lorem ipsum dolor amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore et dolore magna aliqua enim ad minim veniamquis</p>
+                                    <p>Our collection offers the perfect balance of value, quality, and performance.</p>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@ function WhyUs() {
                                 </div>
                                 <div className="why-content">
                                     <h2>Trusted by Thousands</h2>
-                                    <p>Lorem ipsum dolor amet consectetur adipiscing elit sed do eiusmod tempor incididunt labore et dolore magna aliqua enim ad minim veniamquis</p>
+                                    <p>We are committed to delivering top quality vehicles and excellent customer support.</p>
                                 </div>
                             </div>
                         </div>

@@ -5,36 +5,40 @@ function ProductFilters() {
 
   const [products, setProducts] = useState([]);
   const [brandModels, setBrandModels] = useState({});
-
-  const bodyTypes = ["Sedan", "SUV", "Coupe", "Hatchback", "Wagon", "Mini Van", "Station Wagon", "Van"];
-  const fuelTypes = ["Petrol", "Diesel", "Electric", "Hybrid"];
+  const [fuelTypes, setFuelTypes] = useState([]);
+  const [ccOptions, setCcOptions] = useState([]);
 
   const kmsOptions = [
-  10000,
-  30000,
-  50000,
-  75000,
-  100000,
-  125000
-];
+    10000,
+    30000,
+    50000,
+    75000,
+    100000,
+    125000
+  ];
+
+  const priceRanges = [
+    { label: "Under $50 K", min: 0, max: 50000 },
+    { label: "$50k – $1 Lakh", min: 50000, max: 100000 },
+    { label: "$1 – $2 Lakh", min: 100000, max: 200000 },
+    { label: "$2 – $3 Lakh", min: 200000, max: 300000 },
+    { label: "$3 – $4 Lakh", min: 300000, max: 400000 },
+    { label: "Above 4 Lakh", min: 400000, max: 2000000 }
+  ];
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedModels = searchParams.getAll("model");
-  const selectedBody = searchParams.getAll("body");
   const selectedFuel = searchParams.getAll("fuel");
   const selectedKms = searchParams.get("kms");
+  const selectedCC = searchParams.get("cc");
 
-  const minLimit = 500000;
-  const maxLimit = 10000000;
-
-  const minPrice = Number(searchParams.get("minPrice")) || minLimit;
-  const maxPrice = Number(searchParams.get("maxPrice")) || maxLimit;
-  
+  const minPrice = Number(searchParams.get("minPrice")) || 0;
+  const maxPrice = Number(searchParams.get("maxPrice")) || Infinity;
 
   const [openBrand, setOpenBrand] = useState(null);
 
-  // 🔥 FETCH PRODUCTS
+  // FETCH PRODUCTS
   useEffect(() => {
 
     fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")
@@ -43,28 +47,31 @@ function ProductFilters() {
 
         setProducts(data);
 
-        // create brand -> models structure
+        // BRAND -> MODELS
         const grouped = {};
-
         data.forEach((item) => {
-
           if (!grouped[item.makers]) {
             grouped[item.makers] = [];
           }
-
           if (!grouped[item.makers].includes(item.productName)) {
             grouped[item.makers].push(item.productName);
           }
-
         });
 
         setBrandModels(grouped);
 
-      });
+        // FUEL TYPES FROM API
+        const uniqueFuels = [...new Set(data.map(car => car.fuel))];
+        setFuelTypes(uniqueFuels);
 
+        // ENGINE CAPACITY FROM API
+        const engineRanges = [800, 1000, 1200, 1500, 1800, 2000, 3000, 4000, 5000];
+        setCcOptions(engineRanges);
+
+      });
   }, []);
 
-  const updatePrice = (min, max) => {
+  const updatePriceRange = (min, max) => {
     const params = new URLSearchParams(searchParams);
 
     params.set("minPrice", min);
@@ -75,11 +82,8 @@ function ProductFilters() {
 
   const updateParams = (key, values) => {
     const params = new URLSearchParams(searchParams);
-
     params.delete(key);
-
     values.forEach((v) => params.append(key, v));
-
     setSearchParams(params);
   };
 
@@ -88,13 +92,10 @@ function ProductFilters() {
   };
 
   const toggleBrand = (makers) => {
-
     const productName = brandModels[makers];
-
     const allSelected = productName.every((m) =>
       selectedModels.includes(m)
     );
-
     if (allSelected) {
       updateModels(selectedModels.filter((m) => !productName.includes(m)));
     } else {
@@ -103,86 +104,65 @@ function ProductFilters() {
   };
 
   const toggleModel = (productName) => {
-
     let updated;
-
     if (selectedModels.includes(productName)) {
       updated = selectedModels.filter((m) => m !== productName);
     } else {
       updated = [...selectedModels, productName];
     }
-
     updateModels(updated);
   };
 
-  const toggleBody = (body) => {
-
-    let updated;
-
-    if (selectedBody.includes(body)) {
-      updated = selectedBody.filter((b) => b !== body);
-    } else {
-      updated = [...selectedBody, body];
-    }
-
-    updateParams("body", updated);
-  };
-
   const toggleFuel = (fuel) => {
-
     let updated;
-
     if (selectedFuel.includes(fuel)) {
       updated = selectedFuel.filter((f) => f !== fuel);
     } else {
       updated = [...selectedFuel, fuel];
     }
-
     updateParams("fuel", updated);
   };
 
-  const updateKms = (kms) => {
+  const updateEngine = (cc) => {
   const params = new URLSearchParams(searchParams);
-
-  if (selectedKms == kms) {
-    // agar same radio dubara click ho
-    params.delete("kms"); // filter remove
+  if (selectedCC == cc) {
+    params.delete("cc");
   } else {
-    params.set("kms", kms);
+    params.set("cc", cc);
   }
-
   setSearchParams(params);
 };
+
+  const updateKms = (kms) => {
+    const params = new URLSearchParams(searchParams);
+    if (selectedKms == kms) {
+      params.delete("kms");
+    } else {
+      params.set("kms", kms);
+    }
+    setSearchParams(params);
+  };
 
   return (
     <div className="filters">
 
       {/* BRAND + MODELS */}
       <h4 className="filter-title">Brand + Models</h4>
-
       <div className="accordion">
-
         {Object.keys(brandModels).map((brand) => {
-
           const models = brandModels[brand];
-
           const brandChecked = models.every((m) =>
             selectedModels.includes(m)
           );
 
           return (
             <div className="accordion-item" key={brand}>
-
               <h2 className="accordion-header">
-
                 <label className="check">
-                  <input
-                    type="checkbox"
+                  <input type="checkbox"
                     checked={brandChecked}
-                    onChange={() => toggleBrand(brand)}
-                  />
+                    onChange={() => toggleBrand(brand)} />
                 </label>
-
                 <button
                   className={`accordion-button p-0 ${openBrand === brand ? "" : "collapsed"}`}
                   onClick={() =>
@@ -191,7 +171,6 @@ function ProductFilters() {
                 >
                   <h6>{brand}</h6>
                 </button>
-
               </h2>
 
               <div className={`accordion-collapse collapse ${openBrand === brand ? "show" : ""}`}>
@@ -199,11 +178,9 @@ function ProductFilters() {
                   <div className="d-grid gap-2">
                     {models.map((productName) => (
                       <label className="check" key={productName}>
-                        <input
-                          type="checkbox"
+                        <input type="checkbox"
                           checked={selectedModels.includes(productName)}
-                          onChange={() => toggleModel(productName)}
-                        />
+                          onChange={() => toggleModel(productName)} />
                         {productName}
                       </label>
                     ))}
@@ -216,32 +193,31 @@ function ProductFilters() {
 
       </div>
 
-      {/* BODY TYPE */}
-      <h4 className="filter-title">Body Type</h4>
-      <div className="accordion d-grid gap-2">
-        {bodyTypes.map((body) => (
-          <label className="check" key={body}>
-            <input
-              type="checkbox"
-              checked={selectedBody.includes(body)}
-              onChange={() => toggleBody(body)}
-            />
-            {body}
-          </label>
-        ))}
-      </div>
-
       {/* FUEL TYPE */}
       <h4 className="filter-title">Fuel Type</h4>
       <div className="accordion d-grid gap-2">
         {fuelTypes.map((fuel) => (
           <label className="check" key={fuel}>
-            <input
-              type="checkbox"
+            <input type="checkbox"
               checked={selectedFuel.includes(fuel)}
-              onChange={() => toggleFuel(fuel)}
-            />
+              onChange={() => toggleFuel(fuel)} />
             {fuel}
+          </label>
+        ))}
+      </div>
+
+      {/* ENGINE CAPACITY */}
+      <h4 className="filter-title">Engine Capacity</h4>
+      <div className="accordion d-grid gap-2">
+        {ccOptions.map((cc) => (
+          <label className="check" key={cc}>
+            <input
+              type="radio"
+              name="cc"
+              checked={selectedCC == cc}
+              onChange={() => updateEngine(cc)}
+            />
+            {cc} cc or less
           </label>
         ))}
       </div>
@@ -265,27 +241,20 @@ function ProductFilters() {
       {/* PRICE FILTER */}
       <h4 className="filter-title">Price Range</h4>
       <div className="accordion d-grid gap-2">
-        <div className="d-flex justify-content-between mb-2">
-          <strong>$ {Number(minPrice).toLocaleString()}</strong>
-          <strong>$ {Number(maxPrice).toLocaleString()}</strong>
-        </div>
+        {priceRanges.map((range, index) => {
+          const checked =
+            Number(minPrice) === range.min &&
+            Number(maxPrice) === range.max;
 
-        <div className="range-slider">
-          <input
-            type="range"
-            min={minLimit}
-            max={maxLimit}
-            value={minPrice}
-            onChange={(e) => updatePrice(e.target.value, maxPrice)}
-          />
-          <input
-            type="range"
-            min={minLimit}
-            max={maxLimit}
-            value={maxPrice}
-            onChange={(e) => updatePrice(minPrice, e.target.value)}
-          />
-        </div>
+          return (
+            <label className="check" key={index}>
+              <input type="checkbox"
+                checked={checked}
+                onChange={() => updatePriceRange(range.min, range.max)} />
+              {range.label}
+            </label>
+          );
+        })}
       </div>
 
     </div>

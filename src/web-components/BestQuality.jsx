@@ -21,7 +21,7 @@ function BestQuality() {
               </button>
                 <div className="buy-quality-content-box">
                     <h1>Buy the Best Quality Car With Us</h1>
-                    <p>Lorem ipsum dolor amet consectetur adipisicing elit sed do eiusmod cste dolore magnam aliquam quaerat demi text voluptatem dolore amet magna aliqua magna elit.</p>
+                    <p>With our trusted service and diverse car options, you can enjoy a smooth and stress-free buying experience. Choose your ideal car with confidence and drive away knowing you made the right choice.</p>
                 </div>
             </div>
           </div>

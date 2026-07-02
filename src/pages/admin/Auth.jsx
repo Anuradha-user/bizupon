@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import logoWhite from "../../web-images/logo-white.svg";
 import loginBG from '../../web-images/login-bg.jpg';
+import '../../web-css/WebStyle.css'
 
 function Auth() {
   const [showLogin, setShowLogin] = useState(true);
