@@ -46,7 +46,7 @@ const Header = () => {
                                     <Link to="#"><IconTruckDelivery /> Logistics</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link to="/"><IconUserScan /> Register</Link>
+                                    <Link to="/register"><IconUserScan /> Register</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to="/auth"><IconLogin2 /> Login</Link>

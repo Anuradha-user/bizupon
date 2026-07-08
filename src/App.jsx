@@ -95,6 +95,7 @@ function App() {
 
       {/* AUTH (NO HEADER FOOTER) */}
       <Route path="/auth" element={<Auth />} />
+      <Route path="/register" element={<Auth />} />
       <Route path="/login" element={<Login />} />
 
       {/* ADMIN */}
