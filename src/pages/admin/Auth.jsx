@@ -1,33 +1,16 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
 import logoWhite from "../../web-images/logo-white.svg";
 import loginBG from '../../web-images/login-bg.jpg';
 import '../../web-css/WebStyle.css';
-import ApiLayout from "../../assets/Apilayout";
-import CircularProgress from "@mui/material/CircularProgress";
 import SignupForm from './SignupForm';
 import LoginForm from './loginForm';
 function Auth() {
-  const navigate = useNavigate();
+  
   const [showLogin, setShowLogin] = useState(true);
  
-  const [errors, setErrors] = useState({});
-  const [formError, setFormError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const location = useLocation();
-
-
   
-
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
- 
-
- 
- 
+  const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === "/auth") {
@@ -71,9 +54,7 @@ function Auth() {
                       className={showLogin ? "active" : ""}
                       onClick={() => {
                         setShowLogin(true);
-                        setErrors({});
-                        setFormError("");
-                        setSuccessMessage("");
+                        
                       }}
                       type="button"
                     >
@@ -83,9 +64,7 @@ function Auth() {
                       className={!showLogin ? "active" : ""}
                       onClick={() => {
                         setShowLogin(false);
-                        setErrors({});
-                        setFormError("");
-                        setSuccessMessage("");
+                      
                       }}
                       type="button"
                     >
