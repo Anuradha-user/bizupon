@@ -111,7 +111,7 @@ const LoginForm = () => {
                             className={`login ${loading ? "loading" : ""}`}
                             disabled={loading}
                           >
-                            {loading ? <span className="button-spinner" /> : "Login to your Account!"}
+                            {loading ? <span className="button-spinner" /> : "Login to your Account"}
                           </button>
                         </div>
                       </form>

@@ -1,11 +1,15 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { registerApi } from '../../api/authApi';
+import OtpVerification from './OtpVerification';
 
 const SignupForm = () => {
       const [errors, setErrors] = useState({});
       const [formError, setFormError] = useState("");
       const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showOtp, setShowOtp] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -14,18 +18,70 @@ const SignupForm = () => {
         phone: "",
         country: "India"
       });
-
+const navigate = useNavigate();
 
       // Handle input changes
+
+
      const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Validate only this field
+  const error = validateField(e.target.name, e.target.value);
+
+  setErrors((prev) => ({
+    ...prev,
+    [e.target.name]: error,
+  }));
   };
 
 
-  
+  //validate fields
+const validateField = (name, value) => {
+  switch (name) {
+    case "firstName":
+      if (!value.trim()) return "First name is required.";
+      if (value.trim().length < 2)
+        return "First name must be at least 2 characters.";
+      if (!/^[A-Za-z]+$/.test(value))
+        return "Only letters are allowed";
+      return "";
+
+    case "lastName":
+      if (!value.trim()) return "Last name is required.";
+      if (!/^[A-Za-z]+$/.test(value))
+        return "Only letters are allowed";
+      return "";
+
+    case "email":
+      if (!value.trim()) return "Email is required.";
+      if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value))
+        return "Please enter a valid email address.";
+      return "";
+
+    case "phone":
+      if (!value.trim()) return "Phone number is required.";
+      if (!/^[0-9]{10}$/.test(value))
+        return "Phone number must be 10 digits.";
+      return "";
+
+    case "country":
+      if (!value) return "Please select a country.";
+      return "";
+
+    case "password":
+      if (!value) return "Password is required.";
+      if (value.length < 8)
+        return "Password must be at least 8 characters.";
+      return "";
+
+    default:
+      return "";
+  }
+};
+
   //register form validation
   const validateRegisterForm = () => {
     const newErrors = {};
@@ -100,47 +156,37 @@ const handleRegisterSubmit = async (e) => {
     }
 
     try {
-      const response = await fetch(
-        "http://192.168.10.199:8010/api/User/Registration",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            country: formData.country,
-            password: formData.password,
-            mobileDeviceId: "web"
-          })
-        }
-      );
+      const response = await registerApi({
+        regid: "",
+        fname: formData.firstName,
+        lname: formData.lastName,
+        countryId: 0,
+        countryName: formData.country,
+        cityName: "",
+        contactNo: formData.phone,
+        email: formData.email,
+        password: formData.password,
+        empid: 0,
+        mobileDeviceId: "",
+      });
 
-      const data = await response.json();
-      if (!response.ok) {
-        setFormError(data.message || "Registration failed");
+      const data = response?.data;
+      console.log("Registration API Response:", data);
+
+      if (response?.status >= 400) {
+        setFormError(data?.message || "Registration failed");
         return;
       }
 
-      setSuccessMessage("Registration successful. Please login.");
-
-      setShowLogin(true);
-      setFormData({
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        phone: "",
-        country: "India"
-      });
-      navigate("/auth");
+      setSuccessMessage("Registration successful. Please enter the OTP sent to your email.");
+      setShowOtp(true);
       console.log("register data", data);
-
     } catch (err) {
-      setFormError("Something went wrong. Please try again.");
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Something went wrong. Please try again.";
+      setFormError(message);
       console.log("error", err);
     } finally {
       setLoading(false);
@@ -160,16 +206,37 @@ const handleRegisterSubmit = async (e) => {
   
       return () => clearTimeout(timeoutId);
     }, [errors, formError]);
+  const handleOtpVerify = async (otp) => {
+    console.log('Verify OTP', otp, formData.email);
+    setFormError('');
+    setSuccessMessage('OTP verified successfully. You can now log in.');
+    setShowOtp(false);
+    navigate('/auth');
+  };
+
+  const handleOtpResend = async () => {
+    console.log('Resend OTP to', formData.email);
+    setSuccessMessage('A new OTP has been sent to your email.');
+  };
+
   return (
     <>
      <h2 className="form-title">Create your Account!</h2>
-                          <form onSubmit={handleRegisterSubmit}>
+     {showOtp ? (
+       <OtpVerification
+         email={formData.email}
+         loading={loading}
+         onVerify={handleOtpVerify}
+         onResend={handleOtpResend}
+       />
+     ) : (
+       <form onSubmit={handleRegisterSubmit}>
                             <div className="d-flex gap-4">
                               <div className="input-field">
                                 <input
                                   type="text"
                                   className="form-control"
-                                  required
+                                  
                                   name="firstName"
                                   value={formData.firstName}
                                   onChange={handleChange}
@@ -181,7 +248,7 @@ const handleRegisterSubmit = async (e) => {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  required
+                                  
                                   name="lastName"
                                   value={formData.lastName}
                                   onChange={handleChange}
@@ -196,7 +263,7 @@ const handleRegisterSubmit = async (e) => {
                                 <input
                                   type="email"
                                   className="form-control"
-                                  required
+                                  
                                   name="email"
                                   value={formData.email}
                                   onChange={handleChange}
@@ -208,7 +275,7 @@ const handleRegisterSubmit = async (e) => {
                                 <input
                                   type="tel"
                                   className="form-control"
-                                  required
+                                  
                                   name="phone"
                                   value={formData.phone}
                                   onChange={handleChange}
@@ -222,7 +289,7 @@ const handleRegisterSubmit = async (e) => {
                               <div className="input-field">
                                 <select
                                   className="form-control"
-                                  required
+                                  
                                   name="country"
                                   value={formData.country}
                                   onChange={handleChange}
@@ -238,7 +305,7 @@ const handleRegisterSubmit = async (e) => {
                                 <input
                                   type="password"
                                   className="form-control"
-                                  required
+                                  
                                   name="password"
                                   value={formData.password}
                                   onChange={handleChange}
@@ -257,6 +324,7 @@ const handleRegisterSubmit = async (e) => {
                             {formError && <p className="text-danger">{formError}</p>}
                             {successMessage && <p className="text-success">{successMessage}</p>}
                           </form>
+     )}
                         </>
   )
 }

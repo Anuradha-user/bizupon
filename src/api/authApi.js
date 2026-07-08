@@ -1,4 +1,5 @@
-import { ApiLayout } from "./apiLayout.js";
+// import { ApiLayout } from "./ApiLayout.js";
+import ApiLayout from "./ApiLayout";
 import api from "./axios";
 
 export const loginApi = (data) =>
@@ -7,7 +8,7 @@ export const registerApi = (data) =>
     api.post(ApiLayout.register, data);
 
 export const refreshTokenApi = (data) =>
-    api.post(ApiLayout.refreshtoken, data);
+    api.post(ApiLayout.refresh, data);
 
 export const logoutApi = () =>
-    api.post(ApiLayout.authLogout);
+    api.post(ApiLayout.logout);
