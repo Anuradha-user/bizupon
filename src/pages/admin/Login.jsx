@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import logo from '../../web-images/logo.svg';
 import { IconLogin } from "@tabler/icons-react";
 import "../../admin-css/Login.css";
-
+import ApiLayout from "../../assets/Apilayout";
 function Login() {
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        "https://jaishriganesha.com/authentication/api/Account/Account",
+        ApiLayout.login,
         {
           method: "POST",
           headers: {
