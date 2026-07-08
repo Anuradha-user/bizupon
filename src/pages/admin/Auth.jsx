@@ -1,6 +1,5 @@
-import { useEffect, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import logoWhite from "../../web-images/logo-white.svg";
 import loginBG from '../../web-images/login-bg.jpg';
@@ -10,6 +9,19 @@ import CircularProgress from "@mui/material/CircularProgress";
 function Auth() {
   const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    country: "India"
+  });
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const location = useLocation();
+
 
   const [form, setForm] = useState({
     userName: "",
@@ -25,12 +37,14 @@ function Auth() {
     return () => clearTimeout(timer);
   }, [error]);
 
-  const handleChange = (e) => {
+  const handleLoginChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -73,20 +87,6 @@ function Auth() {
 
     setLoading(false);
   };
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    country: "India"
-  });
-  const [errors, setErrors] = useState({});
-  const [formError, setFormError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
-const navigate = useNavigate();
   useEffect(() => {
     if (Object.keys(errors).length === 0 && !formError) {
       return;
@@ -101,12 +101,12 @@ const navigate = useNavigate();
   }, [errors, formError]);
 
   useEffect(() => {
-  if (location.pathname === "/auth") {
-    setShowLogin(true);
-  } else if (location.pathname === "/register") {
-    setShowLogin(false);
-  }
-}, [location.pathname]);
+    if (location.pathname === "/auth") {
+      setShowLogin(true);
+    } else if (location.pathname === "/register") {
+      setShowLogin(false);
+    }
+  }, [location.pathname]);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -114,65 +114,65 @@ const navigate = useNavigate();
     });
   };
 
-//register form validation
-const validateRegisterForm = () => {
-  const newErrors = {};
+  //register form validation
+  const validateRegisterForm = () => {
+    const newErrors = {};
 
-  // First Name checks whether firstName is empty (or contains only spaces)
-  if (!formData.firstName.trim()) {
-    newErrors.firstName = "First name is required.";
-  } 
-  else if (formData.firstName.trim().length < 2) {
-    newErrors.firstName = "First name must be at least 2 characters.";
+    // First Name checks whether firstName is empty (or contains only spaces)
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required.";
+    }
+    else if (formData.firstName.trim().length < 2) {
+      newErrors.firstName = "First name must be at least 2 characters.";
 
-  }
-   else if (!/^[A-Za-z]+$/.test(formData.firstName)) {
-    newErrors.firstName = "Only letters are allowed";
-  }
+    }
+    else if (!/^[A-Za-z]+$/.test(formData.firstName)) {
+      newErrors.firstName = "Only letters are allowed";
+    }
 
-  // Last Name
-  if (!formData.lastName.trim()) {
-    newErrors.lastName = "Last name is required.";
-  } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
-    newErrors.lastName = "Only letters are allowed";
-}
+    // Last Name
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required.";
+    } else if (!/^[A-Za-z]+$/.test(formData.lastName)) {
+      newErrors.lastName = "Only letters are allowed";
+    }
 
-  // Email
-  if (!formData.email.trim()) {
-    newErrors.email = "Email is required.";
-  } else if (
-    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
-  ) {
-    newErrors.email = "Please enter a valid email address.";
-  }
+    // Email
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Please enter a valid email address.";
+    }
 
-  // Phone
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Phone number is required.";
-  } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-    newErrors.phone = "Phone number must be 10 digits.";
-  }
+    // Phone
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be 10 digits.";
+    }
 
-  // Country
-  if (!formData.country) {
-    newErrors.country = "Please select a country.";
-  }
+    // Country
+    if (!formData.country) {
+      newErrors.country = "Please select a country.";
+    }
 
-  // Password
-  if (!formData.password) {
-    newErrors.password = "Password is required.";
-  } else if (formData.password.length < 8) {
-    newErrors.password = "Password must be at least 8 characters.";
-  } 
-  // else if (
-  //   !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(formData.password)
-  // ) {
-  //   newErrors.password =
-  //     "Password must contain uppercase, lowercase, number and special character.";
-  // }
+    // Password
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+    // else if (
+    //   !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/.test(formData.password)
+    // ) {
+    //   newErrors.password =
+    //     "Password must contain uppercase, lowercase, number and special character.";
+    // }
 
-  return newErrors;
-};
+    return newErrors;
+  };
 
   //Login form submit
   const handleRegisterSubmit = async (e) => {
@@ -216,7 +216,7 @@ const validateRegisterForm = () => {
       }
 
       setSuccessMessage("Registration successful. Please login.");
-     
+
       setShowLogin(true);
       setFormData({
         email: "",
@@ -309,7 +309,7 @@ const validateRegisterForm = () => {
                             name="userName"
                             className="form-control"
                             value={form.userName}
-                            onChange={handleChange}
+                            onChange={handleLoginChange}
                             required
                           />
                           <label>Email</label>
@@ -321,7 +321,7 @@ const validateRegisterForm = () => {
                             name="password"
                             className="form-control"
                             value={form.password}
-                            onChange={handleChange}
+                            onChange={handleLoginChange}
                             required
                           />
                           <label>Password</label>
@@ -432,9 +432,9 @@ const validateRegisterForm = () => {
 
                         <div className="login-btn">
                           <button type="submit" className="signup" disabled={loading}>
-                              {loading ? <CircularProgress color="white" size={26} /> : "Register Now!"}
+                            {loading ? <CircularProgress color="white" size={26} /> : "Register Now!"}
                           </button>
-                            
+
                         </div>
                         {formError && <p className="text-danger">{formError}</p>}
                         {successMessage && <p className="text-success">{successMessage}</p>}
