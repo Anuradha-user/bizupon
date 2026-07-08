@@ -43,7 +43,7 @@ function Auth() {
     setLoading(true);
 
     try {
-      const response = await axios.post(ApiLayout.login, {
+      const response = await axios.post("https://jaishriganesha.com/authentication/api/Account/Account", {
         username: form.userName,
         password: form.password,
         mobileDeviceId: "web",
