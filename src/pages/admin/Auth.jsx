@@ -1,10 +1,77 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import logoWhite from "../../web-images/logo-white.svg";
 import loginBG from '../../web-images/login-bg.jpg';
-import '../../web-css/WebStyle.css'
+import '../../web-css/WebStyle.css';
+import ApiLayout from "../../assets/Apilayout";
 
 function Auth() {
+  const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(true);
+
+  const [form, setForm] = useState({
+    userName: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(""), 5000);
+    return () => clearTimeout(timer);
+  }, [error]);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!form.userName || !form.password) {
+      setError("Please enter username and password.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(ApiLayout.login, {
+        username: form.userName,
+        password: form.password,
+        mobileDeviceId: "web",
+      });
+
+      const data = response.data;
+      console.log("Login API Response:", data);
+
+      if (data?.auth?.authenticationResponse && data?.auth?.bizlogin === "1") {
+        // save each field directly to localStorage
+        const userSession = data.auth.userSession;
+        Object.entries(userSession).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            localStorage.setItem(key, value);
+          }
+        });
+
+        navigate("/");
+      } else {
+        setError("Invalid username or password");
+      }
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server Error");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <>
@@ -42,14 +109,35 @@ function Auth() {
                   {showLogin ? (
                     <>
                       <h2 className="form-title">User Login</h2>
-                      <form>
+
+                      {error && (
+                        <p style={{ color: "red", marginBottom: 15 }}>
+                          {error}
+                        </p>
+                      )}
+
+                      <form onSubmit={handleLogin}>
                         <div className="input-field">
-                          <input type="text" className="form-control" required />
+                          <input
+                            type="text"
+                            name="userName"
+                            className="form-control"
+                            value={form.userName}
+                            onChange={handleChange}
+                            required
+                          />
                           <label>Email</label>
                         </div>
 
                         <div className="input-field">
-                          <input type="password" className="form-control" required />
+                          <input
+                            type="password"
+                            name="password"
+                            className="form-control"
+                            value={form.password}
+                            onChange={handleChange}
+                            required
+                          />
                           <label>Password</label>
                         </div>
 
@@ -58,8 +146,12 @@ function Auth() {
                         </div>
 
                         <div className="login-btn">
-                          <button type="button" className="login">
-                            Login to your Account!
+                          <button
+                            type="submit"
+                            className={`login ${loading ? "loading" : ""}`}
+                            disabled={loading}
+                          >
+                            {loading ? <span className="button-spinner" /> : "Login to your Account!"}
                           </button>
                         </div>
                       </form>
@@ -73,7 +165,6 @@ function Auth() {
                             <input type="text" className="form-control" required />
                             <label>First Name</label>
                           </div>
-
                           <div className="input-field">
                             <input type="text" className="form-control" required />
                             <label>Last Name</label>
@@ -85,7 +176,6 @@ function Auth() {
                             <input type="text" className="form-control" required />
                             <label>Email</label>
                           </div>
-
                           <div className="input-field">
                             <input type="text" className="form-control" required />
                             <label>Phone</label>
@@ -102,7 +192,6 @@ function Auth() {
                             </select>
                             <label>Country</label>
                           </div>
-
                           <div className="input-field">
                             <input type="password" className="form-control" required />
                             <label>Password</label>
@@ -115,7 +204,6 @@ function Auth() {
                       </form>
                     </>
                   )}
-
                 </div>
               </div>
             </div>
