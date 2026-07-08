@@ -1,23 +1,24 @@
-import React, { useState } from 'react'
-
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ApiLayout from '../../api/Apilayout';
+import '../../web-css/WebStyle.css'; 
 const LoginForm = () => {
-      const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-       const [form, setForm] = useState({
-          userName: "",
-          password: "",
-        });
-    
- const handleLoginChange = (e) => {
+  const [form, setForm] = useState({
+    userName: "",
+    password: "",
+  });
+
+  const handleLoginChange = (e) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   };
-
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,91 +33,91 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(ApiLayout.login, {
-        username: form.userName,
+        userName: form.userName,
         password: form.password,
         mobileDeviceId: "web",
       });
 
-      const data = response.data;
-      console.log("Login API Response:", data);
+      const result = response.data;
+      console.log("Login API Response:", result);
 
-      if (data?.auth?.authenticationResponse && data?.auth?.bizlogin === "1") {
-        // save each field directly to localStorage
-        const userSession = data.auth.userSession;
-        Object.entries(userSession).forEach(([key, value]) => {
-          if (value !== undefined && value !== null) {
-            localStorage.setItem(key, value);
-          }
-        });
+      if (result?.isSuccess && result?.statusCode === 200) {
+        const session = result.data.userSession;
+        const authRes = result.data.authenticationResponse;
 
-        navigate("/");
+        localStorage.setItem("fullName", session.fullName);
+        localStorage.setItem("mobileDeviceId", session.mobileDeviceId);
+        localStorage.setItem("senderID", session.senderID);
+        localStorage.setItem("senderSocket", session.senderSocket);
+        localStorage.setItem("userName", session.userName);
+        localStorage.setItem("userType", session.userType);
+        localStorage.setItem("tokenId", authRes.tokenId);
+        localStorage.setItem("refreshToken", authRes.refreshToken);
+        localStorage.setItem("accessToken", authRes.accessToken);
+
+        navigate("/", { replace: true });
       } else {
-        setError("Invalid username or password");
+        setError(result?.message || "Invalid username or password");
+        setLoading(false);
       }
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Server Error");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  
-
   return (
-   <>
-   <>
-                      <h2 className="form-title">User Login</h2>
+    <>
+      <h2 className="form-title">User Login</h2>
 
-                      {error && (
-                        <p style={{ color: "red", marginBottom: 15 }}>
-                          {error}
-                        </p>
-                      )}
+      {error && (
+        <p style={{ color: "red", marginBottom: 15 }}>
+          {error}
+        </p>
+      )}
 
-                      
-                    </>
-   <form onSubmit={handleLogin}>
-                        <div className="input-field">
-                          <input
-                            type="text"
-                            name="userName"
-                            className="form-control"
-                            value={form.userName}
-                            onChange={handleLoginChange}
-                            required
-                          />
-                          <label>Email</label>
-                        </div>
+      <form onSubmit={handleLogin}>
+        <div className="input-field">
+          <input
+            type="text"
+            name="userName"
+            className="form-control"
+            value={form.userName}
+            onChange={handleLoginChange}
+            required
+          />
+          <label>Email</label>
+        </div>
 
-                        <div className="input-field">
-                          <input
-                            type="password"
-                            name="password"
-                            className="form-control"
-                            value={form.password}
-                            onChange={handleLoginChange}
-                            required
-                          />
-                          <label>Password</label>
-                        </div>
+        <div className="input-field">
+          <input
+            type="password"
+            name="password"
+            className="form-control"
+            value={form.password}
+            onChange={handleLoginChange}
+            required
+          />
+          <label>Password</label>
+        </div>
 
-                        <div className="d-flex justify-content-end flex-wrap">
-                          <a href="#" className="forget">Forget Password?</a>
-                        </div>
+        <div className="d-flex justify-content-end flex-wrap">
+          <a href="#" className="forget">Forget Password?</a>
+        </div>
 
-                        <div className="login-btn">
-                          <button
-                            type="submit"
-                            className={`login ${loading ? "loading" : ""}`}
-                            disabled={loading}
-                          >
-                            {loading ? <span className="button-spinner" /> : "Login to your Account!"}
-                          </button>
-                        </div>
-                      </form>
-   </>
-  )
-}
+      <div className="login-btn">
+  <button
+    type="submit"
+    className={`login ${loading ? "loading" : ""}`}
+    disabled={loading}
+  >
+    {loading ? <span className="button-spinner" /> : "Login to your Account!"}
+  </button>
+</div>
+      </form>
+    </>
+  );
+};
 
-export default LoginForm
+export default LoginForm;

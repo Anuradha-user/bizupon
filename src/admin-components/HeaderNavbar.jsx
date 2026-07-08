@@ -3,7 +3,7 @@ import { IconArrowBigRight, IconArrowNarrowRight, IconChevronDown, IconLockPassw
 import userImg from '../admin-images/user.png'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
-import ApiLayout from "../assets/Apilayout";
+import ApiLayout from "../api/Apilayout";
 
 function HeaderNavbar({ onToggleSidebar }) {
 

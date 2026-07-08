@@ -1,6 +1,6 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect, useState } from 'react'
-
+import { useNavigate } from 'react-router-dom';
 const SignupForm = () => {
       const [errors, setErrors] = useState({});
       const [formError, setFormError] = useState("");
@@ -127,7 +127,7 @@ const handleRegisterSubmit = async (e) => {
 
       setSuccessMessage("Registration successful. Please login.");
 
-      setShowLogin(true);
+      // setShowLogin(true);
       setFormData({
         email: "",
         password: "",

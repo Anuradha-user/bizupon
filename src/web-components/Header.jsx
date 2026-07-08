@@ -3,7 +3,7 @@ import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
 import { Link, NavLink } from "react-router-dom";
 import axios from "axios";
-import ApiLayout from "../assets/Apilayout";
+import ApiLayout from '../api/Apilayout';
 
 const Header = () => {
 
@@ -43,8 +43,7 @@ const Header = () => {
       await axios.post(ApiLayout.logout, {
         username: localStorage.getItem("userName"),
         role: localStorage.getItem("role"),
-        deviceInfoOrTokenId:
-          localStorage.getItem("tokenID") || localStorage.getItem("mobileDeviceId"),
+        
       });
     } catch (err) {
       console.error("Logout API failed:", err);
@@ -55,7 +54,7 @@ const Header = () => {
   };
 
   const handleLogoutClick = () => {
-    if (!confirmLogout) {
+    if (confirmLogout) {
       setConfirmLogout(true);
       setTimeout(() => setConfirmLogout(false), 3000);
       return;

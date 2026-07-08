@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import logo from '../../web-images/logo.svg';
 import { IconLogin } from "@tabler/icons-react";
 import "../../admin-css/Login.css";
-import ApiLayout from "../../assets/Apilayout";
+import ApiLayout from "../../api/Apilayout";
+// import ApiLayout from "../../api/Apilayout";
 function Login() {
   const navigate = useNavigate();
 
@@ -143,14 +144,14 @@ return (
                     )}
                   </div>
 
-                  <div className="forgotPassword">
+                  <div className="forgotPassword">  
                     <Link to="/forgot-password">Forgot Password?</Link>
                   </div>
 
                   <div className="form-group mb-0 row">
                     <div className="col-12">
                       <div className="d-grid mt-2">
-                        <button className="btn btn-md btn-primary" type="submit" disabled={loading}>
+                        <button className="btn btn-md btn-primary" type="button" disabled={loading}>
                           {loading ? "Logging in..." : "Login"}
                           <IconLogin />
                         </button>
