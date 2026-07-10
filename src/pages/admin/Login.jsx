@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from '../../web-images/logo.svg';
 import { IconLogin } from "@tabler/icons-react";
 import "../../admin-css/Login.css";
 import ApiLayout from "../../api/Apilayout";
-// import ApiLayout from "../../api/Apilayout";
+
 function Login() {
   const navigate = useNavigate();
 
@@ -51,41 +51,47 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        ApiLayout.login,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username: form.email,
-            password: form.password,
-            mobileDeviceId: ""
-          })
-        }
-      );
+      const response = await axios.post(ApiLayout.login, {
+        userName: form.email,
+        password: form.password,
+        mobileDeviceId: "",
+      });
 
-      const data = await response.json();
-      console.log("API Response:", data);
+      const result = response.data;
+      console.log("API Response:", result);
 
-      // ✅ REAL SUCCESS CONDITION (tumhare API structure ke hisab se)
-      if (
-        response.ok &&
-        data?.auth?.authenticationResponse &&
-        data?.auth?.bizlogin === "1"
-      ) {
-        localStorage.setItem("user", JSON.stringify(data.auth.userSession));
-        navigate("/admin/dashboard"); // dashboard
+      if (result?.isSuccess && result?.statusCode === 200) {
+        const session = result.data.userSession;
+        const authRes = result.data.authenticationResponse;
+
+        localStorage.setItem("fullName", session.fullName);
+        localStorage.setItem("mobileDeviceId", session.mobileDeviceId);
+        localStorage.setItem("senderID", session.senderID);
+        localStorage.setItem("senderSocket", session.senderSocket);
+        localStorage.setItem("userName", session.userName);
+        localStorage.setItem("userType", session.userType);
+        localStorage.setItem("tokenId", authRes.tokenId);
+        localStorage.setItem("refreshToken", authRes.refreshToken);
+        localStorage.setItem("accessToken", authRes.accessToken);
+
+        navigate("/admin/dashboard");
       } else {
         setErrorMsg("Invalid email or password");
+        setLoading(false);
       }
 
     } catch (error) {
-      setErrorMsg("Server error, please try again");
+      console.error(error);
+      const status = error.response?.status;
+      if (status === 404 || status === 401) {
+        setErrorMsg("Invalid email or password");
+      } else if (!error.response) {
+        setErrorMsg("Unable to reach the server. Check your connection.");
+      } else {
+        setErrorMsg("Please try again");
+      }
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
 return (
@@ -151,7 +157,7 @@ return (
                   <div className="form-group mb-0 row">
                     <div className="col-12">
                       <div className="d-grid mt-2">
-                        <button className="btn btn-md btn-primary" type="button" disabled={loading}>
+                        <button className="btn btn-md btn-primary" type="submit" disabled={loading}>
                           {loading ? "Logging in..." : "Login"}
                           <IconLogin />
                         </button>

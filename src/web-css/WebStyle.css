@@ -532,7 +532,7 @@ main .form{
     padding: 50px;
     width: 75%;
     position: relative;
-    z-index: 100000;
+    z-index: 1;
 }
 main .form-title{
   font-size: 26px;
@@ -586,6 +586,41 @@ main .input-field:focus-within label{
     font-size: 15px !important;
 
 }
+main .input-field input:not(:placeholder-shown) + label,
+main .input-field input:focus + label {
+    transform: translateY(-22px);
+}
+
+
+.input-field-login {
+    position: relative;
+}
+
+.input-field-login .form-control {
+    padding-right: 45px; /* Space for eye icon */
+}
+
+.input-field-login .password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.input-field-login .password-toggle:hover {
+    color: #2AB805;
+}
+.input-error-login {
+  border: 1px solid red !important;
+}
+
 main .input-field input:valid+label,
 main .input-field select:valid+label{
     transform: translatey(-22px);
@@ -3359,4 +3394,37 @@ iframe{
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@media only screen and (max-width: 991px){
+    main .login-wrapper{
+        width: 100%;
+        padding: 30px 20px;
+    }
+    main .login-row.h-100{
+        display: flex;
+        flex-direction: column;
+    }
+    main .login-side-text{
+        position: static;
+        width: 100%;
+        top: 0;
+        margin-bottom: 30px;
+    }
+    main .Login-main-heading{
+        font-size: 32px;
+    }
+    main .login-logSign{
+        width: 100%;
+        margin-top: 30px;
+    }
+    main .form{
+        width: 100%;
+        margin: 30px 0 0 0;
+        padding: 25px;
+        min-height: auto;
+    }
+    main::after{
+        display: none;
+    }
 }

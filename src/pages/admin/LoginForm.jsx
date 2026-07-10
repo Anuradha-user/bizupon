@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ApiLayout from '../../api/Apilayout';
-import '../../web-css/WebStyle.css'; 
+import '../../web-css/WebStyle.css';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     userName: "",
@@ -18,6 +20,7 @@ const LoginForm = () => {
       ...form,
       [e.target.name]: e.target.value,
     });
+    setError("");
   };
 
   const handleLogin = async (e) => {
@@ -78,11 +81,12 @@ const LoginForm = () => {
       )}
 
       <form onSubmit={handleLogin}>
-        <div className="input-field">
+        <div className="input-field input-field-login">
           <input
             type="text"
             name="userName"
-            className="form-control"
+            placeholder=" "
+            className={`form-control ${error ? "input-error-login" : ""}`}
             value={form.userName}
             onChange={handleLoginChange}
             required
@@ -90,31 +94,38 @@ const LoginForm = () => {
           <label>Email</label>
         </div>
 
-        <div className="input-field">
+        <div className="input-field input-field-login">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
-            className="form-control"
-            value={form.password}
+            placeholder=" "
+            className={`form-control ${error ? "input-error-login" : ""}`}
+            value={form.password }
             onChange={handleLoginChange}
             required
           />
           <label>Password</label>
+          <span
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
         </div>
 
         <div className="d-flex justify-content-end flex-wrap">
           <a href="#" className="forget">Forget Password?</a>
         </div>
 
-      <div className="login-btn">
-  <button
-    type="submit"
-    className={`login ${loading ? "loading" : ""}`}
-    disabled={loading}
-  >
-    {loading ? <span className="button-spinner" /> : "Login to your Account!"}
-  </button>
-</div>
+        <div className="login-btn">
+          <button
+            type="submit"
+            className={`login ${loading ? "loading" : ""}`}
+            disabled={loading}
+          >
+            {loading ? <span className="button-spinner" /> : "Login to your Account!"}
+          </button>
+        </div>
       </form>
     </>
   );
