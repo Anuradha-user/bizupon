@@ -32,7 +32,7 @@ function Auth() {
         <img className="login-bg-inner" src={loginBG} alt="" />
       </div>
       <main className="overflow-hidden">
-        <div className="wrapper">
+        <div className="wrapper login-wrapper">
           <div className="main-inner">
             <div className="logo">
               <div className="logo-icon">
@@ -40,16 +40,16 @@ function Auth() {
               </div>
             </div>
 
-            <div className="row h-100 align-content-center ">
+            <div className="row h-100 align-content-center login-row">
               {/* LEFT SIDE */}
               <div className="col-lg-6 col-md-12 col-12 tab-100">
-                <div className="side-text">
+                <div className="side-text login-side-text">
                   <article>
-                    <h1 className="main-heading">Welcome Back</h1>
+                    <h1 className="main-heading Login-main-heading">Welcome Back</h1>
                     <p>Access 140,000+ Quality Vehicles at the Lowest Prices, Weekly through bizupon.</p>
                   </article>
 
-                  <div className="logSign">
+                  <div className="logSign login-logsign">
                     <button
                       className={showLogin ? "active" : ""}
                       onClick={() => {

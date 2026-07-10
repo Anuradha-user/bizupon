@@ -22,22 +22,24 @@ function HeaderNavbar({ onToggleSidebar }) {
         }
     }, []);
 
-    const handleLogout = async () => {
-        try {
-            await axios.post(ApiLayout.logout, {
-                username: localStorage.getItem("userName"),
-                role: localStorage.getItem("role"),
-                deviceInfoOrTokenId:
-                    localStorage.getItem("tokenID") || localStorage.getItem("mobileDeviceId"),
-            });
-        } catch (err) {
-            console.error("Logout API failed:", err);
-        } finally {
-            localStorage.clear();
-            navigate("/login");
-        }
-    };
-
+  const handleLogout = async () => {
+  try {
+    await axios.post(ApiLayout.logout, {
+      username: localStorage.getItem("userName"),
+      role: localStorage.getItem("role"), // note: role isn't in your trimmed list — add it back if logout needs it
+      deviceInfoOrTokenId: localStorage.getItem("tokenId"),
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+  } catch (err) {
+    console.error("Logout API failed:", err);
+  } finally {
+    localStorage.clear();
+    window.location.href = "/";
+  }
+};
   return (
     <header className="header">
         <div className="header-wrapper">

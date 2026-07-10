@@ -1,12 +1,26 @@
-import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan, IconX } from '@tabler/icons-react'
+import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan, IconX, IconLogout2, IconUserCircle } from '@tabler/icons-react'
 import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
 import { Link, NavLink } from "react-router-dom";
+import axios from "axios";
+import ApiLayout from '../api/Apilayout';
 
 const Header = () => {
 
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+
+  useEffect(() => {
+    const userName = localStorage.getItem("userName");
+    if (userName) {
+      setUser({
+        userName,
+        fullName: localStorage.getItem("fullName"),
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +37,30 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(ApiLayout.logout, {
+        username: localStorage.getItem("userName"),
+        role: localStorage.getItem("role"),
+        
+      });
+    } catch (err) {
+      console.error("Logout API failed:", err);
+    } finally {
+      localStorage.clear();
+      window.location.href = "/";
+    }
+  };
+
+  const handleLogoutClick = () => {
+    if (confirmLogout) {
+      setConfirmLogout(true);
+      setTimeout(() => setConfirmLogout(false), 3000);
+      return;
+    }
+    handleLogout();
+  };
 
   return (
     <>
@@ -45,12 +83,30 @@ const Header = () => {
                                 <li className="nav-item">
                                     <Link to="#"><IconTruckDelivery /> Logistics</Link>
                                 </li>
-                                <li className="nav-item">
-                                    <Link to="/register"><IconUserScan /> Register</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to="/auth"><IconLogin2 /> Login</Link>
-                                </li>
+
+                                {user ? (
+                                  <>
+                                    <li className="nav-item">
+                                        <span className="d-flex align-items-center gap-1">
+                                            <IconUserCircle /> {user.fullName || user.userName}
+                                        </span>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link to="#" onClick={handleLogoutClick}>
+                                            <IconLogout2 /> {confirmLogout ? "Click again to confirm" : "Logout"}
+                                        </Link>
+                                    </li>
+                                  </>
+                                ) : (
+                                  <>
+                                    <li className="nav-item">
+                                        <Link to="/register"><IconUserScan /> Register</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link to="/auth"><IconLogin2 /> Login</Link>
+                                    </li>
+                                  </>
+                                )}
                             </ul>
                         </div>
                     </div>
