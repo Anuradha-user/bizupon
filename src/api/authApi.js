@@ -12,3 +12,11 @@ export const refreshTokenApi = (data) =>
 
 export const logoutApi = () =>
     api.post(ApiLayout.logout);
+
+export const emailVerificationApi = (data) =>
+    api.post(ApiLayout.emailVerification, data);
+
+
+
+export const emailResendOtpApi = (data) =>
+    api.patch(ApiLayout.emailResendOtp, data);

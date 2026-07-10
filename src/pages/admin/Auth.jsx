@@ -40,7 +40,7 @@ function Auth() {
               </div>
             </div>
 
-            <div className="row h-100 align-content-center">
+            <div className="row h-100 align-content-center ">
               {/* LEFT SIDE */}
               <div className="col-lg-6 col-md-12 col-12 tab-100">
                 <div className="side-text">
