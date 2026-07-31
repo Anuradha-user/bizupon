@@ -1,12 +1,12 @@
 import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan, IconX, IconLogout2, IconUserCircle } from '@tabler/icons-react'
 import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import ApiLayout from '../api/Apilayout';
+import ApiLayout from '../api/ApiLayout';
 
 const Header = () => {
-
+  const navigate = useNavigate();
   const [isSticky, setIsSticky] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
@@ -42,14 +42,16 @@ const Header = () => {
     try {
       await axios.post(ApiLayout.logout, {
         username: localStorage.getItem("userName"),
-        role: localStorage.getItem("role"),
-        
+        role: localStorage.getItem("role"), 
+         
       });
     } catch (err) {
       console.error("Logout API failed:", err);
     } finally {
       localStorage.clear();
-      window.location.href = "/";
+      window.location.href = "/";   
+    //  navigate("/");   
+
     }
   };
 

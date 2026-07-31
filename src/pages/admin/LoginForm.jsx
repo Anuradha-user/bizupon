@@ -54,6 +54,7 @@ const LoginForm = () => {
         localStorage.setItem("senderSocket", session.senderSocket);
         localStorage.setItem("userName", session.userName);
         localStorage.setItem("userType", session.userType);
+        localStorage.setItem("role", session.role);
         localStorage.setItem("tokenId", authRes.tokenId);
         localStorage.setItem("refreshToken", authRes.refreshToken);
         localStorage.setItem("accessToken", authRes.accessToken);
@@ -79,7 +80,7 @@ const LoginForm = () => {
           {error}
         </p>
       )}
-
+ 
       <form onSubmit={handleLogin}>
         <div className="input-field input-field-login">
           <input
