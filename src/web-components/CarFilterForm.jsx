@@ -2,123 +2,131 @@ import { IconSearch } from "@tabler/icons-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
+import axios from "axios";
+import ApiLayout from "../api/apiLayout";
 
 function CarFilterForm() {
-
   const navigate = useNavigate();
 
-  const [cars, setCars] = useState([]);
+  const [allModels, setAllModels] = useState([]);
+  const [makersOptions, setMakersOptions] = useState([]);
+  const [fuelsOptions, setFuelsOptions] = useState([]);
 
-  const [makers, setMakers] = useState([]);
-  const [models, setModels] = useState([]);
-  const [fuels, setFuels] = useState([]);
+  const [selectedMaker, setSelectedMaker] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [selectedFuel, setSelectedFuel] = useState(null);
 
-  const [filters, setFilters] = useState({
-    makers: "",
-    model: "",
-    fuel: ""
-  });
+   const fetchMasterData = async () => {
+      try {
+        const response = await axios.get(ApiLayout.CarData);
+        const data = response.data?.data || {};
 
-  // API CALL
+        const formattedMakers = (data.lstmaker || [])
+          .filter((m) => m.name?.trim())
+          .map((m) => ({
+            value: m.name,
+            label: m.name,
+            id: m.id,
+          }));
+        setMakersOptions(formattedMakers);
+
+        setAllModels(data.lstmodel || []);
+
+        const uniqueFuelsMap = new Map();
+        (data.lstfuletype || []).forEach((f) => {
+          const name = f.name?.trim();
+          if (name && name !== "-" && !uniqueFuelsMap.has(name)) {
+            uniqueFuelsMap.set(name, { value: name, label: name });
+          }
+        });
+        setFuelsOptions(Array.from(uniqueFuelsMap.values()));
+
+      } catch (err) {
+        console.error("Error fetching Car Master Data:", err);
+      }
+    };
+
   useEffect(() => {
-
-  fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")
-    .then(res => res.json())
-    .then(data => {
-
-      setCars(data);
-
-      const uniqueMakers = [...new Set(data.map(car => car.makers))];
-      setMakers(uniqueMakers.map(m => ({ value: m, label: m })));
-
-      const uniqueFuels = [...new Set(data.map(car => car.fuel))];
-      setFuels(uniqueFuels.map(f => ({ value: f, label: f })));
-
-    });
-
+   
+    fetchMasterData();
   }, []);
 
-  // MODELS BASED ON MAKER
-  useEffect(() => {
-
-  if (!filters.makers) {
-    setModels([]);
-    return;
-  }
-
-  const filteredModels = [
-    ...new Set(
-      cars
-        .filter(car => car.makers === filters.makers)
-        .map(car => car.productName)
-    )
-  ];
-
-  setModels(filteredModels.map(m => ({ value: m, label: m })));
-
-  }, [filters.makers, cars]);
-
-  const handleSelectChange = (selected, name) => {
-    setFilters(prev => ({
-      ...prev,
-      [name]: selected ? selected.value : ""
-    }));
-
-  };
+  const modelsOptions = selectedMaker
+    ? Array.from(
+        new Map(
+          allModels
+            .filter(
+              (m) =>
+                String(m.makerId) === String(selectedMaker.id) &&
+                m.name?.trim()
+            )
+            .map((m) => [m.name, { value: m.name, label: m.name }])
+        ).values()
+      )
+    : [];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const cleanFilters = Object.fromEntries(
-      Object.entries(filters).filter(([_, v]) => v)
-    );
-    const query = new URLSearchParams(cleanFilters).toString();
-    navigate(`/product-list?${query}`);
+
+    const queryParams = new URLSearchParams();
+    if (selectedMaker?.value) queryParams.append("makers", selectedMaker.value);
+    if (selectedModel?.value) queryParams.append("model", selectedModel.value);
+    if (selectedFuel?.value) queryParams.append("fuel", selectedFuel.value);
+
+    navigate(`/product-list?${queryParams.toString()}`);
   };
 
   return (
-
     <section className="search-form">
       <div className="container">
         <div className="form-block">
           <div className="row">
             <div className="col-lg-12">
-
               <h1 className="form-title">Let's Find Your Perfect Car</h1>
 
               <form onSubmit={handleSubmit} className="row mt-4">
-
-                {/* MAKER */}
                 <div className="col-md-3">
-                  <Select options={makers}
+                  <Select
+                    options={makersOptions}
+                    value={selectedMaker}
                     placeholder="Select Maker"
-                    onChange={(selected) => handleSelectChange(selected,"makers")}
-                    isSearchable />
+                    onChange={(option) => {
+                      setSelectedMaker(option);
+                      setSelectedModel(null); 
+                    }}
+                    isSearchable
+                    isClearable
+                  />
                 </div>
 
-                {/* MODEL */}
                 <div className="col-md-3">
-                  <Select options={models}
+                  <Select
+                    options={modelsOptions}
+                    value={selectedModel}
                     placeholder="Select Model"
-                    onChange={(selected) => handleSelectChange(selected,"model")}
-                    isSearchable />
+                    onChange={(option) => setSelectedModel(option)}
+                    isSearchable
+                    isClearable
+                  />
                 </div>
 
-                {/* FUEL */}
                 <div className="col-md-3">
-                  <Select options={fuels}
+                  <Select
+                    options={fuelsOptions}
+                    value={selectedFuel}
                     placeholder="Select Fuel"
-                    onChange={(selected) => handleSelectChange(selected,"fuel")}
-                    isSearchable />
+                    onChange={(option) => setSelectedFuel(option)}
+                    isSearchable
+                    isClearable
+                  />
                 </div>
 
-                {/* BUTTON */}
                 <div className="col-md-3">
-                  <button className="btn theme-btn w-100">
+                  <button type="submit" className="btn theme-btn w-100">
                     <IconSearch width={18} strokeWidth="3" className="me-1" />
                     Apply Filter
                   </button>
                 </div>
-
               </form>
 
             </div>
@@ -126,9 +134,7 @@ function CarFilterForm() {
         </div>
       </div>
     </section>
-
   );
-
 }
 
 export default CarFilterForm;

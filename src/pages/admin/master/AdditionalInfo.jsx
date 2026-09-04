@@ -170,7 +170,7 @@ function AdditionalInfo() {
                             </div>
                           </td>
                         </tr>
-                      ))
+                      )) 
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
@@ -185,7 +185,7 @@ function AdditionalInfo() {
               <div className="selectedItem">
                   {selectedIds.length} Selected from {additionalData.length}
               </div>
-              <div className="actionButtonArea">
+              <div className="actionButtonArea"> 
                 <button className="btn btn-xs btn-primary"><IconCheck /> Active</button>
                 <button className="btn btn-xs btn-warning"><IconX /> De-Active</button>
                 <button className="btn btn-xs btn-primary"><IconCheck /> Update</button>

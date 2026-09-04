@@ -64,7 +64,7 @@ h1,h2,h3,h4,h5,h6{
 .pre {
 	position:absolute;
 	border-radius:50%;
-	animation:animRond43 2s linear infinite;
+	animation:animRond43 1s linear infinite;
 }
 @keyframes animRond43 {
 	0% { transform:rotate(0deg); }
