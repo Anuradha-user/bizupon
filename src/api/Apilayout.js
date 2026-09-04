@@ -4,9 +4,6 @@ export const baseURL = "http://192.168.10.199";
 // let USER_AUTH = `${baseURL}/api`;
 let USER_AUTH = `${baseURL}:8002/api`;
 let USER_REG = `${baseURL}:8010/api`;
-let MasterApi = `${baseURL}:8011/api`;
-let ProductList = `${baseURL}:8009/api;`
-
 
 
 const ApiLayout = {
@@ -20,8 +17,6 @@ const ApiLayout = {
   logout: `${USER_AUTH}/Account/logout`,
   refresh: `${USER_AUTH}/Account/refresh`,
   signup: `${USER_AUTH}/Account/signup`,
-  CarData: `${MasterApi}/Home/GetDDLMaster`,
-
 }
 
 export default ApiLayout;
