@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ApiLayout from "../api/apiLayout";
+import ApiLayout from "../api/Apilayout";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -14,9 +14,7 @@ const IMAGE_BASE_URL = "https://www.bizupon.com/Makerimage/";
 function TopBrand() {
   const [brands, setBrands] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchBrands = async () => {
+  const fetchBrands = async () => {
       try {
         const response = await axios.get(ApiLayout.CarData);
         
@@ -27,6 +25,8 @@ function TopBrand() {
         console.error("Error fetching makers:", err);
       }
     };
+  useEffect(() => {
+  
 
     fetchBrands();
   }, []);
@@ -84,11 +84,7 @@ function TopBrand() {
                         <img
                           src={imageUrl}
                           alt={brand.name}
-                          className="img-fluid"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "https://via.placeholder.com/100?text=No+Image";
-                          }}
+                          className="img-fluid" 
                         />
                       </div>
                       <h6>{brand.name}</h6>

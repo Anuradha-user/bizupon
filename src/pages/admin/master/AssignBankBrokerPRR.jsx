@@ -10,7 +10,6 @@ function AssignBankBrokerPRR() {
     const [brokerList, setBrokerList] = useState([]);
     const [selectBroker, setSelectBroker] = useState([null])
 
-    // Fetch Ship Dropdown
     const fetchShipNameData = async() => {
         try{
             const res = await axios.get('https://jaishriganesha.com/bizupon-master/api/Port/GetddlShip')

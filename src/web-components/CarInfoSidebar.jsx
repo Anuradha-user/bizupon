@@ -28,7 +28,7 @@ function CarInfoSidebar({ car }) {
                     <h4>C&F Price (Yen) ¥ {car.price}</h4>
                     <div className="info-block">
                         <IconInfoCircleFilled />
-                        <div className="pricetooltip">
+                        <div className="pricetooltip"> 
                             <p>
                                 Стоимость автомобиля C&F (ФОБ и фрахт) <br />
                                 + ПРР и СБКТС (расчеты в йенах)<br />

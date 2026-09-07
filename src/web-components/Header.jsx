@@ -3,7 +3,7 @@ import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import ApiLayout from '../api/ApiLayout';
+import ApiLayout from '../api/Apilayout';
 
 const Header = () => {
     const navigate = useNavigate();

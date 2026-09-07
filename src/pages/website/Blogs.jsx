@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import BlogCard from "../../web-components/BlogCard";
 import BlogCategory from "../../web-components/BlogCategory";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -20,7 +21,7 @@ function Blogs() {
     .then((res) => {
       console.log("API:", res.data);
 
-        const blogArray = data?.data?.lstBlogs;
+        const blogArray = res.data?.data?.lstBlogs;
 
         setBlogs(Array.isArray(blogArray) ? blogArray : []);
       })
