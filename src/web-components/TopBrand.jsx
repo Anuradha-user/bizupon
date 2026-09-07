@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ApiLayout from "../api/Apilayout";
+import ApiLayout from "../api/apiLayout";
 
 import "swiper/css";
 import "swiper/css/navigation";
