@@ -24,7 +24,7 @@ function WhyUs() {
                                     <h1>01</h1>
                                 </div>
                                 <div className="why-content">
-                                    <h2>Best Quality Cars</h2>
+                                    <h2>Best Quality Cars</h2> 
                                     <p>Discover a wide range of high-quality cars designed for performance, comfort, and reliability.</p>
                                 </div>
                             </div>

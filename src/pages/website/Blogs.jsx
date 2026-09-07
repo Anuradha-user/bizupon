@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import BlogCard from "../../web-components/BlogCard";
 import BlogCategory from "../../web-components/BlogCategory";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -16,14 +17,12 @@ function Blogs() {
 }, [selectedCategory]);
 
   useEffect(() => {
-    fetch("https://jaishriganesha.com/bizupon-blog/api/Blog/GetNewsNBlog")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("API:", data);
+    axios.get("https://jaishriganesha.com/bizupon-blog/api/Blog/GetNewsNBlog")
+    .then((res) => {
+      console.log("API:", res.data);
 
-        const blogArray = data?.data?.lstBlogs;
+        const blogArray = res.data?.data?.lstBlogs;
 
-        // ✅ Force array
         setBlogs(Array.isArray(blogArray) ? blogArray : []);
       })
       .catch((err) => {
@@ -32,12 +31,10 @@ function Blogs() {
       });
   }, []);
 
-  // 👉 पहले filter define करो
   const filteredBlogs = selectedCategory
     ? blogs.filter((blog) => blog.categoryId === selectedCategory)
     : blogs;
 
-  // 👉 फिर pagination
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
 

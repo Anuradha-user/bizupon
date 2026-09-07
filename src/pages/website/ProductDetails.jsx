@@ -10,7 +10,6 @@ function ProductDetails() {
 
   const { id } = useParams();
   const [car, setCar] = useState(null);
-
   useEffect(() => {
 
     fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")

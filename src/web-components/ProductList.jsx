@@ -8,7 +8,6 @@ function ProductList() {
   const [allProducts, setAllProducts] = useState([]);
   const [searchParams] = useSearchParams();
 
-  // API CALL
   useEffect(() => {
 
     fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")
@@ -32,7 +31,6 @@ function ProductList() {
     const maker = searchParams.get("maker");
     const model = searchParams.get("model");
     const fuel = searchParams.get("fuel");
-
     if (maker) {
       filtered = filtered.filter(
         (p) => p.maker?.toLowerCase() === maker.toLowerCase()

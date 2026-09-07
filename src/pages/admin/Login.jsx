@@ -69,6 +69,7 @@ function Login() {
         localStorage.setItem("senderID", session.senderID);
         localStorage.setItem("senderSocket", session.senderSocket);
         localStorage.setItem("userName", session.userName);
+        localStorage.setItem("role", session.role);
         localStorage.setItem("userType", session.userType);
         localStorage.setItem("tokenId", authRes.tokenId);
         localStorage.setItem("refreshToken", authRes.refreshToken);
