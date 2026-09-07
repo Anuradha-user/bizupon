@@ -3,7 +3,7 @@ import { IconArrowBigRight, IconArrowNarrowRight, IconChevronDown, IconLockPassw
 import userImg from '../admin-images/user.png'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios";
-import ApiLayout from "../api/ApiLayout";
+import apiLayout from "../api/Apilayout";
 
 function HeaderNavbar({ onToggleSidebar }) {
 
@@ -24,7 +24,7 @@ function HeaderNavbar({ onToggleSidebar }) {
 
   const handleLogout = async () => {
   try {
-    await axios.post(ApiLayout.logout, {
+    await axios.post(apiLayout.logout, {
       username: localStorage.getItem("userName"),
       role: localStorage.getItem("role"), // note: role isn't in your trimmed list — add it back if logout needs it
       deviceInfoOrTokenId: localStorage.getItem("tokenId"),

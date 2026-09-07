@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ApiLayout from '../../api/apiLayout';
+import apiLayout from '../../api/Apilayout';
 import '../../web-css/WebStyle.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 const LoginForm = () => {
