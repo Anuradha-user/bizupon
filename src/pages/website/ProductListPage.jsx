@@ -3,99 +3,142 @@ import { useSearchParams } from "react-router-dom";
 import ProductFilters from "../../web-components/ProductFilters";
 import ProductListCard from "../../web-components/ProductListCard";
 import { IconChevronRight, IconLayoutGrid, IconList, IconChevronLeft } from "@tabler/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import { getProductList } from "../../api/productApi,js";
+import { appendProducts, resetProducts, setError, setHasMore, setLoading, setNextPageLoading, setPage, setTotalProducts } from "../../redux/productSlice";
 
-function ProductListPage() {
 
-  const [allProducts, setAllProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const ProductListPage = () => {
+  const filterLoading = useSelector((state) => state?.filters?.loading);
 
   const [view, setView] = useState("grid-view");
   const [sortType, setSortType] = useState("");
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 30;
 
-  // 🔥 FETCH PRODUCTS
-  useEffect(() => {
-
-    fetch("https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData")
-      .then(res => res.json())
-      .then(data => {
-        setAllProducts(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Failed to load cars");
-        setLoading(false);
-      });
-
-  }, []);
-
-  // 🔎 FILTER + SEARCH
-  const filteredProducts = useMemo(() => {
-
-  const maker = searchParams.getAll("makers");
-  const models = searchParams.getAll("model");
-  const fuels = searchParams.getAll("fuel");
-  const transmissions = searchParams.getAll("transmission");
-
-  const kms = Number(searchParams.get("kms")) || Infinity;
-  const cc = Number(searchParams.get("cc")) || Infinity;
-
-  const minPrice = Number(searchParams.get("minPrice")) || 0;
-  const maxPrice = Number(searchParams.get("maxPrice")) || Infinity;
-
-  return allProducts.filter(car => {
-
-  const engine = Number(car.cc) || 0;
-  const mileage = Number(car.mileage) || 0;
-
-  return (
-      (maker.length === 0 || maker.includes(car.makers)) &&
-      (models.length === 0 || models.includes(car.productName)) &&
-      (fuels.length === 0 || fuels.includes(car.fuel)) &&
-      (transmissions.length === 0 || transmissions.includes(car.transmission)) &&
-      engine <= cc &&
-      Number(car.price) >= minPrice &&
-      Number(car.price) <= maxPrice &&
-      mileage <= kms &&
-      (search === "" || car.productId.toString().includes(search))
-    );
+  /********************************* */
+  const { ref, inView } = useInView({
+    // threshold: 0,
+    rootMargin: "200px 0px",
+    //   triggerOnce: false,
   });
+  const dispatch = useDispatch();
 
-  }, [allProducts, searchParams, search]);
+  const {
+    products,
+    page,
+    limit,
+    loading,
+    nextPageLoading,
+    hasMore,
+    error,
+    totalProducts,
+  } = useSelector(state => state.products);
+  //  FETCH PRODUCT list
 
-  // 🔃 SORTING
-  const sortedProducts = useMemo(() => {
+  const fetchProducts = async (pageNo, reset = false) => {
+    console.log("fetch Api called");
+    if (loading) return;
+    if (pageNo === 1) {
+      dispatch(setLoading(true));
+    }
+    else {
+      dispatch(setNextPageLoading(true));
+    }
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+    try {
+      const params = {
+        PageIndex: pageNo,
+        PageSize: limit,
+        CurrencyCode: "YEN",
+        CurrencyValue: "1",
+        MakerId: searchParams.getAll("makers").join(","),
+        ModelId: searchParams.getAll("model").join(","),
 
-    const sorted = [...filteredProducts];
+        FuelType: searchParams.get("fuel") || "",
 
-    if (sortType === "low") return sorted.sort((a, b) => a.price - b.price);
-    if (sortType === "high") return sorted.sort((a, b) => b.price - a.price);
+        CC: searchParams.get("cc") || "",
 
-    return sorted;
+        MileageFrom: searchParams.get("minKms") || "",
 
-  }, [filteredProducts, sortType]);
+        MileageTo: searchParams.get("maxKms") || "",
 
-  // 📄 PAGINATION
-  const currentProducts = useMemo(() => {
+        MinPrice: searchParams.get("minPrice") || "",
 
-    const indexOfLast = currentPage * productsPerPage;
-    const indexOfFirst = indexOfLast - productsPerPage;
+        MaxPrice: searchParams.get("maxPrice") || "",
+        PriceSortBy: sortType || "",
 
-    return sortedProducts.slice(indexOfFirst, indexOfLast);
+      };
+      const response = await getProductList(params);
+      console.log("Product List Response:", response.data);
+      const productList = response.data.data.lstProduct || [];
+      dispatch(setTotalProducts(response.data.data.totalRecords || 0));
+      if (reset) {
+        dispatch(resetProducts());
+        dispatch(appendProducts(productList));
+      }
+      else {
+        dispatch(appendProducts(productList));
+      }
+      dispatch(setPage(pageNo));
+      dispatch(setHasMore(
+        productList.length === limit
+      )
+      );
 
-  }, [sortedProducts, currentPage]);
+    }
 
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
+    catch (err) {
+      if (err.response?.status === 404) {
+        dispatch(resetProducts());
 
-  // reset page when filter/search change
+      }
+      else {
+        dispatch(
+          setError(
+            err.response?.data?.message ||
+            err.message
+          )
+        );
+      }
+    }
+    finally {
+      dispatch(setLoading(false));
+      dispatch(setNextPageLoading(false));
+    }
+  };
+
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchParams, search]);
+
+
+    fetchProducts(1, true);
+
+
+  }, [searchParams, sortType]);
+  useEffect(() => {
+    if (!inView) {
+      return;
+    }
+    if (!hasMore) {
+      return;
+    }
+    if (loading || nextPageLoading) {
+      return;
+    }
+    fetchProducts(page + 1);
+
+  }, [
+    inView,
+    hasMore,
+    loading,
+    // nextPageLoading,
+    page
+  ])
+
+
 
   return (
 
@@ -105,7 +148,11 @@ function ProductListPage() {
 
           {/* FILTER */}
           <div className="col-lg-3 col-md-4">
+            {/* {filterLoading && 
+              <ProductFilters />
+              } */}
             <ProductFilters />
+
           </div>
 
           {/* PRODUCT LIST */}
@@ -126,7 +173,7 @@ function ProductListPage() {
                   <div className="carListingTopBar">
 
                     <div>
-                      Search Result <strong>({sortedProducts.length})</strong>
+                      Search Result <strong> ({products.length}/{totalProducts})</strong>
                     </div>
 
                     <div className="d-flex gap-2">
@@ -159,14 +206,14 @@ function ProductListPage() {
                       >
 
                         <option value="">Sort by</option>
-                        <option value="low">Price Low → High</option>
-                        <option value="high">Price High → Low</option>
+                        <option value="asc">Price Low → High</option>
+                        <option value="desc">Price High → Low</option>
 
                       </select>
                     </div>
                   </div>
 
-                  {sortedProducts.length === 0 ? (
+                  {products.length === 0 && !loading ? (
 
                     <div className="text-center py-5">
                       <h4>No Cars Found</h4>
@@ -177,31 +224,32 @@ function ProductListPage() {
 
                     <>
                       <div className={`carlisting-contentArea ${view}`}>
-                        <ProductListCard products={currentProducts} view={view} />
+                        <ProductListCard products={products} view={view} />
                       </div>
-
+                      {/**observer */}
+                      <div ref={ref} />
                       {/* PAGINATION */}
-                      <div className="pagination">
+                      {/* <div className="pagination">
 
-                        <button
-                          disabled={currentPage === 1}
-                          onClick={() => setCurrentPage(currentPage - 1)}
-                          className="btn btn-sm btn-dark me-3"
-                        >
-                          <IconChevronLeft />
-                        </button>
+                          <button
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            className="btn btn-sm btn-dark me-3"
+                          >
+                            <IconChevronLeft />
+                          </button>
 
-                        <span>Page {currentPage} of {totalPages}</span>
+                          <span>Page {currentPage} of {totalPages}</span>
 
-                        <button
-                          disabled={currentPage === totalPages}
-                          onClick={() => setCurrentPage(currentPage + 1)}
-                          className="btn btn-sm btn-dark ms-3"
-                        >
-                          <IconChevronRight />
-                        </button>
+                          <button
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            className="btn btn-sm btn-dark ms-3"
+                          >
+                            <IconChevronRight />
+                          </button>
 
-                      </div>
+                        </div> */}
 
                     </>
                   )}

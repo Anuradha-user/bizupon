@@ -1,0 +1,22 @@
+import api from "../api/axios";
+import apiLayout from "./apiLayout";
+
+
+export const getProductList = (params ) =>
+  api.get(apiLayout.productListing, {
+    params
+  });
+
+
+//product detail Api
+
+
+export const getProductDetails = (params) =>
+    api.get(apiLayout.productApi, {
+        params
+    })
+
+
+//car filter data api
+export const getFilterData = () =>
+    api.get(apiLayout.filterApi)
