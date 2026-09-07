@@ -35,7 +35,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(ApiLayout.login, {
+      const response = await axios.post(apiLayout.login, {
         userName: form.userName,
         password: form.password,
         mobileDeviceId: "web",
