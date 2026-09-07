@@ -18,5 +18,9 @@ export const emailVerificationApi = (data) =>
 
 
 
-export const emailResendOtpApi = (data) =>
-    api.patch(ApiLayout.emailResendOtp, data);
+export const emailResendOtpApi = (email) =>
+  api.patch(ApiLayout.emailResendOtp, null, {
+    params: {
+      email,
+    },
+  });

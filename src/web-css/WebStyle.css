@@ -425,7 +425,7 @@ ul.social-list li a svg:hover{
 
 main{
     position: relative;
-    z-index: 10000;
+    /* z-index: 10000; */
     min-height: 100vh;
 }
 main::after{

@@ -83,7 +83,7 @@ function Auth() {
                   ) : (
 
                     <>
-                     <SignupForm />
+                     <SignupForm setShowLogin={setShowLogin} />
                       
                     </>
                   )}
