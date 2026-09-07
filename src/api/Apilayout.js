@@ -3,7 +3,6 @@ export const baseURL = "https://192.168.10.199";
 let USER_AUTH = `${baseURL}:8012/api`;
 let USER_REG = `${baseURL}:8110/api`;
 let MasterApi = `${baseURL}:8111/api`;
-let ProductList = `${baseURL}:8019/api`;
 
 const ApiLayout = {
   // ****************** Auth Api ******************

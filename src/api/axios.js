@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL } from "./ApiLayout.js";
+import { baseURL } from "./apiLayout.js";
 
 const api = axios.create({
     baseURL: baseURL,
