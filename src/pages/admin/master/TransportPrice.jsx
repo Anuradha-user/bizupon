@@ -60,7 +60,6 @@ function TransportPrice() {
                 }
             );
 
-            console.log("API Response:", res.data);
 
             const data = (res.data.data || []).map(item => ({
                 value: item.id,
