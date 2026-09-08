@@ -167,13 +167,13 @@ const Header = () => {
                                                 </ul>
                                             </li>
                                             <li>
-                                                <NavLink to="javascript:void(0)" className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
+                                                <NavLink to="/Services" className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to="/blogs" className={({ isActive }) => isActive ? "active" : ""}>Blogs</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="javascript:void(0)" className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
+                                                <NavLink to="/videos" className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
                                             </li>
                                         </ul>
                                     </nav>
@@ -266,7 +266,7 @@ const Header = () => {
                                 <NavLink to="/blogs" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Blogs</NavLink>
                             </li>
                             <li className="">
-                                <NavLink to="" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
+                                <NavLink to="/videos" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
                             </li>
                         </ul>
                     </nav>

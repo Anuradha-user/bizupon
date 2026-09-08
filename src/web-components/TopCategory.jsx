@@ -10,7 +10,6 @@ function TopCategory() {
         { id: "mileage", label: "Low Mileage" },
         { id: "newArrival", label: "New Arrivals" },
     ];
-
   return (
     <section className="category">
         <div className="container">

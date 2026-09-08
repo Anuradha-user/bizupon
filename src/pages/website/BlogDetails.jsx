@@ -12,26 +12,19 @@ function BlogDetails() {
       .then((res) => res.json())
       .then((data) => {
         const blogData = data?.data?.lstBlogs?.[0];
-
         // 👉 DEFINE categories here
         const categories = data?.data?.lstBlogCategory || [];
-
         setBlog(blogData);
-
         // 👉 now use it
         const matchedCategory = categories.find(
           (cat) => cat.id === blogData?.categoryId
         );
-
         setCategoryName(matchedCategory?.categoryName || "Unknown");
       })
       .catch((err) => console.error(err));
   }, [id]);
-
   if (!blog) return <h4>Loading blog...</h4>;
-
   const imageBaseUrl = "https://www.bizupon.com/blogsimages/";
-
   return (
     <div className="blog-details">
       <div className="container">

@@ -11,6 +11,7 @@ import CarFilterForm from "./web-components/CarFilterForm";
 import ProductListPage from "./pages/website/ProductListPage";
 import ProductDetails from "./pages/website/ProductDetails";
 import AboutUs from "./pages/website/AboutUs";
+import Services from "./pages/website/Services";
 import ChangePassword from "./pages/admin/ChangePassword";
 import AddPortImages from "./pages/admin/AddPortImages";
 import ForgotPassword from "./pages/admin/master/ForgotPassword";
@@ -23,6 +24,7 @@ import Fuzokuhin from "./pages/admin/master/Fuzokuhin";
 import ShipMaster from "./pages/admin/master/ShipMaster";
 import SubCategory from "./pages/admin/master/SubCategory";
 import Maker from "./pages/admin/master/Maker";
+import Videos from "./pages/website/Videos";
 import BodyType from "./pages/admin/master/BodyType";
 import Transport from "./pages/admin/master/Transport";
 import Shipping from "./pages/admin/master/Shipping";
@@ -86,11 +88,13 @@ function App() {
       <Route element={<WebsiteLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/services" element={<Services />} />
         <Route path="/filter" element={<CarFilterForm />} />
         <Route path="/product-list" element={<ProductListPage />} />
         <Route path="/product-list/:id" element={<ProductDetails />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
+        <Route path="/videos" element={<Videos />} />
       </Route>
 
       {/* AUTH (NO HEADER FOOTER) */}
