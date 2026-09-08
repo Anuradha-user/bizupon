@@ -29,7 +29,7 @@ productFilter:`https://jaishriganesha.com/BizuponInterview/api/Home/GetProductDa
 
   // ****************** Product API ******************
 
-filterApi:`${PRODUCT}/Home/GetDDLMaster`,
+filterApi:`${PRODUCT}/Home/GetDDLMasterProductCounts`,
 productListing:`${PRODUCT}/Home/productList`,
 productApi:`${PRODUCT}/Home/GetUnSoldProductDetailsByProduct`
 

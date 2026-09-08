@@ -24,3 +24,6 @@ export const emailResendOtpApi = (email) =>
       email,
     },
   });
+
+export const getFilterData = () =>
+  api.get(ApiLayout.filterApi);

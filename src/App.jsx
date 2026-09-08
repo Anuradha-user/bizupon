@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import WebsiteLayout from "./layouts/WebsiteLayout";
+import AppInitializer from "./web-components/AppInitializer";
 import AdminLayout from "./layouts/AdminLayout";
 
 import Home from "./pages/website/Home";
@@ -80,6 +81,8 @@ import UpdateLoadingSurrender from "./pages/admin/product-master/UpdateLoadingSu
 
 function App() {
   return (
+    <>
+    <AppInitializer />
     <Routes>
 
       {/* WEBSITE */}
@@ -170,6 +173,7 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       
     </Routes>
+    </>
   );
 }
 

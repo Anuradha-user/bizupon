@@ -2366,6 +2366,27 @@ iframe{
     margin: 0;
     color: #232428;
 }
+.filters .filter-title h4{
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    flex: 1;
+    color: #232428;
+}
+.filters .clear-all-filters{
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0;
+    margin-left: auto;
+    cursor: pointer;
+    line-height: 1;
+}
+.filters .clear-all-filters:hover{
+    text-decoration: underline;
+}
 
 .accordion{
     padding-top: 0;

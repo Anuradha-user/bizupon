@@ -40,14 +40,12 @@ const ProductListPage = () => {
 
   const fetchProducts = async (pageNo, reset = false) => {
     console.log("fetch Api called");
-    if (loading) return;
+    if (!reset && (loading || nextPageLoading)) return;
     if (pageNo === 1) {
       dispatch(setLoading(true));
-    }
-    else {
+    } else {
       dispatch(setNextPageLoading(true));
     }
-    dispatch(setLoading(true));
     dispatch(setError(null));
     try {
       const params = {
@@ -58,7 +56,7 @@ const ProductListPage = () => {
         MakerId: searchParams.getAll("makers").join(","),
         ModelId: searchParams.getAll("model").join(","),
 
-        FuelType: searchParams.get("fuel") || "",
+        FuelType: searchParams.getAll("fuel").join(",") || "",
 
         CC: searchParams.get("cc") || "",
 
@@ -134,7 +132,7 @@ const ProductListPage = () => {
     inView,
     hasMore,
     loading,
-    // nextPageLoading,
+    nextPageLoading,
     page
   ])
 
@@ -148,10 +146,13 @@ const ProductListPage = () => {
 
           {/* FILTER */}
           <div className="col-lg-3 col-md-4">
-            {/* {filterLoading && 
+            {filterLoading ? (
+              <div className="filters d-flex align-items-center justify-content-center">
+                <div className="spinner-border text-success"></div>
+              </div>
+            ) : (
               <ProductFilters />
-              } */}
-            <ProductFilters />
+            )}
 
           </div>
 
@@ -228,6 +229,13 @@ const ProductListPage = () => {
                       </div>
                       {/**observer */}
                       <div ref={ref} />
+ {nextPageLoading && (
+                <div className="text-center py-5">
+                  <div className="spinner-border text-success"></div>
+                  <p className="mt-2">Loading cars...</p>
+                </div>
+              )}
+                      
                       {/* PAGINATION */}
                       {/* <div className="pagination">
 
