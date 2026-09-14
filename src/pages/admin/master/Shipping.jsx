@@ -59,7 +59,6 @@ function Shipping() {
             const res = await axios.get('https://localhost:7244/api/Port/view-shipping')
 
             setShippingList(res.data.data)
-
         } catch (error){
             console.error("fatching error data", error);
         }
