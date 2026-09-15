@@ -1,7 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { emailResendOtpApi, emailVerificationApi, registerApi } from '../../api/authApi';
+import { emailResendOtpApi, emailVerificationApi, registerApi } from '../../api/apiServices';
 import Swal from 'sweetalert2';
 import { registerValidateField, validateRegisterForm } from '../../helpers/validation';
 import OtpVerification from './OtpVerification';
@@ -154,12 +154,18 @@ const SignupForm = ({ setShowLogin }) => {
     navigate('/auth');
   }
   catch (error) {
+    console.error('OTP Verification Error:', error);
     const message =
       error?.response?.data?.message ||
       error?.response?.message ||
       error?.message ||
       "Failed to verify OTP. Please try again.";
       setFormError(message);
+      Swal.fire({
+        icon: "error",
+        title: "OTP Verification Failed",
+        text: message
+      });
     }
     finally {
       setLoading(false);

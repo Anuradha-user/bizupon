@@ -8,16 +8,16 @@ import "swiper/css/autoplay";
 
 import { Navigation, Thumbs, Autoplay } from "swiper/modules";
 
-function CarImageSlider({ car }) {
+function CarImageSlider({ images }) {
 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   // 🔥 generate multiple images (A → E)
-  const images = ["A", "B", "C", "D", "E"].map(letter =>
-    car?.image
-      ?.replace("/small/", "/large/")
-      ?.replace(/-[A-Z]\.jpg$/, `-${letter}.jpg`)
-  );
+  // const images = ["A", "B", "C", "D", "E"].map(letter =>
+  //   car?.image
+  //     ?.replace("/small/", "/large/")
+  //     ?.replace(/-[A-Z]\.jpg$/, `-${letter}.jpg`)
+  // );
 
   return (
     <div className="car-slider">
@@ -33,7 +33,7 @@ function CarImageSlider({ car }) {
         className="main-slider" >
         {images.map((img, i) => (
           <SwiperSlide key={i}>
-            <img src={img} className="img-fluid w-100" />
+            <img src={`https://www.bizupon.com/car/large/${img.name}`} className="img-fluid w-100" />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -47,7 +47,7 @@ function CarImageSlider({ car }) {
         className="thumb-slider mt-2" >
         {images.map((img, i) => (
           <SwiperSlide key={i}>
-            <img src={img} className="img-fluid" />
+            <img src={`https://www.bizupon.com/car/small/${img.name}`} className="img-fluid" />
           </SwiperSlide>
         ))}
       </Swiper>

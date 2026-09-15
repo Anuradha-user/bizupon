@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getFilterData } from "../api/authApi";
+// import { getFilterData } from "../api/authApi";
 import {
   setFilterData,
   setFilterError,
   setFilterLoading,
 } from "../redux/filterSlice";
+import { getFilterData } from "../api/apiServices";
 
 function AppInitializer() {
   const dispatch = useDispatch();

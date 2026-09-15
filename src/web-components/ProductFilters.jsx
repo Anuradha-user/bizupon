@@ -212,7 +212,37 @@ function ProductFilters() {
                     setOpenBrand(openBrand === brand.id ? null : brand.id)
                   }
                 >
-                  <h6>{brand.name}</h6>
+                  <div className="d-flex align-items-center justify-content-between w-100 gap-2">
+                    <div className="d-flex align-items-center gap-2 flex-grow-1">
+                      <img
+                        src={`https://www.bizupon.com/Makerimage/${brand.flag}`}
+                        alt={brand.name}
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          objectFit: "contain",
+                          borderRadius: "4px",
+                          flexShrink: 0,
+                        }}
+                        onError={(e) => {
+                          e.target.src = "https://www.bizupon.com/Makerimage/Honda.webp";
+                        }}
+                      />
+                      <h6 className="mb-0">{brand.name}</h6>
+                    </div>
+                    <h6
+                      className="mb-0"
+                      style={{
+                        color: "gray",
+                        fontFamily: "Arial, sans-serif",
+                        fontSize: "14px",
+                        marginLeft: "auto",
+                        paddingRight: "5px",
+                      }}
+                    >
+                      ({brand.totalProducts})
+                    </h6>
+                  </div>
                 </button>
               </h2>
 
@@ -226,7 +256,31 @@ function ProductFilters() {
                           checked={isModelChecked(modelItem)}
                           onChange={() => toggleModel(modelItem)}
                         />
-                        {modelItem.name}
+                        <div className="d-flex align-items-center justify-content-between w-100 gap-2">
+                          <span className="mb-0">{modelItem.name}</span>
+                          {modelItem.totalProducts > 0 && (
+                            <span
+                      className="mb-0"
+                      style={{
+                        color: "gray",
+                        fontFamily: "Arial, sans-serif",
+                        fontSize: "14px",
+                        marginLeft: "auto",
+                        paddingRight: "5px",
+                      }}>({modelItem.totalProducts})</span> 
+                          )}</div>
+                        {/* {modelItem.name} */}
+                        {/* {modelItem.totalProducts > 0 && (
+                          <span
+                            style={{
+                              color: "gray",
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "14px",
+                            }}
+                          >
+                            ({modelItem.totalProducts})
+                          </span>
+                        )} */}
                       </label>
                     ))}
                   </div>
