@@ -1,4 +1,5 @@
-import apiLayout from "./Apilayout.js";
+// import apiLayout from "./ApiLayout";
+import ApiLayout from "./ApiLayout";
 import api from "./axios";
 
 export const loginApi = (data) =>
@@ -23,3 +24,6 @@ export const emailResendOtpApi = (email) =>
       email,
     },
   });
+
+export const getFilterData = () =>
+  api.get(ApiLayout.filterApi);

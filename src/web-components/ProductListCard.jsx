@@ -11,7 +11,7 @@ function ProductListCard({ products, view }) {
             key={product.productId} >
 
             <div className="imgThumb">
-                <img src={product.image} alt={product.productName} className="img-fluid" />
+                <img src={`https://www.bizupon.com/car/small/${product.flag}`} alt={product.productName} className="img-fluid" />
             </div>
 
             <div className="product-content">
@@ -22,7 +22,7 @@ function ProductListCard({ products, view }) {
               <h6 className="title">{product.productName}</h6>
               <div className="productInfo">
                 <p>{product.mileage} km</p>
-                <p>{product.registrationdate}</p>
+                <p>{product.registrationDate}</p>
                 <p>{product.fuel}</p>
               </div>
 
