@@ -1,76 +1,56 @@
 import { IconSearch } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Select from "react-select";
-import axios from "axios";
-import ApiLayout from "../api/apiLayout";
 
 function CarFilterForm() {
   const navigate = useNavigate();
-
-  const [allModels, setAllModels] = useState([]);
-  const [makersOptions, setMakersOptions] = useState([]);
-  const [fuelsOptions, setFuelsOptions] = useState([]);
+  const { makers, model, fuelTypes, loading } = useSelector(
+    (state) => state.filters
+  );
 
   const [selectedMaker, setSelectedMaker] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [selectedFuel, setSelectedFuel] = useState(null);
 
-   const fetchMasterData = async () => {
-      try {
-        const response = await axios.get(ApiLayout.CarData);
-        const data = response.data?.data || {};
-
-        const formattedMakers = (data.lstmaker || [])
-          .filter((m) => m.name?.trim())
-          .map((m) => ({
-            value: m.name,
-            label: m.name,
-            id: m.id,
-          }));
-        setMakersOptions(formattedMakers);
-
-        setAllModels(data.lstmodel || []);
-
-        const uniqueFuelsMap = new Map();
-        (data.lstfuletype || []).forEach((f) => {
-          const name = f.name?.trim();
-          if (name && name !== "-" && !uniqueFuelsMap.has(name)) {
-            uniqueFuelsMap.set(name, { value: name, label: name });
-          }
-        });
-        setFuelsOptions(Array.from(uniqueFuelsMap.values()));
-
-      } catch (err) {
-        console.error("Error fetching Car Master Data:", err);
-      }
-    };
-
-  useEffect(() => {
-   
-    fetchMasterData();
-  }, []);
+  const makersOptions = (makers || [])
+    .filter((m) => m.name?.trim())
+    .map((m) => ({
+      value: m.id,
+      label: m.name,
+    }));
 
   const modelsOptions = selectedMaker
-    ? Array.from(
-        new Map(
-          allModels
-            .filter(
-              (m) =>
-                String(m.makerId) === String(selectedMaker.id) &&
-                m.name?.trim()
-            )
-            .map((m) => [m.name, { value: m.name, label: m.name }])
-        ).values()
-      )
+    ? (model || [])
+        .filter(
+          (m) =>
+            String(m.makerId) === String(selectedMaker.value) && m.name?.trim()
+        )
+        .map((m) => ({
+          value: m.id,
+          label: m.name,
+        }))
     : [];
+
+  const uniqueFuelsMap = new Map();
+  (fuelTypes || []).forEach((f) => {
+    const name = f.name?.trim();
+    if (name && name !== "-" && !uniqueFuelsMap.has(name)) {
+      uniqueFuelsMap.set(name, { value: name, label: name });
+    }
+  });
+  const fuelsOptions = Array.from(uniqueFuelsMap.values());
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const queryParams = new URLSearchParams();
-    if (selectedMaker?.value) queryParams.append("makers", selectedMaker.value);
-    if (selectedModel?.value) queryParams.append("model", selectedModel.value);
+    if (selectedModel?.value) {
+      queryParams.append("model", selectedModel.value);
+    } else if (selectedMaker?.value) {
+      queryParams.append("makers", selectedMaker.value);
+    }
     if (selectedFuel?.value) queryParams.append("fuel", selectedFuel.value);
 
     navigate(`/product-list?${queryParams.toString()}`);
@@ -89,13 +69,14 @@ function CarFilterForm() {
                   <Select
                     options={makersOptions}
                     value={selectedMaker}
-                    placeholder="Select Maker"
+                    placeholder={loading ? "Loading makers..." : "Select Maker"}
                     onChange={(option) => {
                       setSelectedMaker(option);
-                      setSelectedModel(null); 
+                      setSelectedModel(null);
                     }}
                     isSearchable
                     isClearable
+                    isDisabled={loading}
                   />
                 </div>
 
@@ -107,6 +88,7 @@ function CarFilterForm() {
                     onChange={(option) => setSelectedModel(option)}
                     isSearchable
                     isClearable
+                    isDisabled={!selectedMaker}
                   />
                 </div>
 
@@ -114,10 +96,11 @@ function CarFilterForm() {
                   <Select
                     options={fuelsOptions}
                     value={selectedFuel}
-                    placeholder="Select Fuel"
+                    placeholder={loading ? "Loading fuel..." : "Select Fuel"}
                     onChange={(option) => setSelectedFuel(option)}
                     isSearchable
                     isClearable
+                    isDisabled={loading}
                   />
                 </div>
 
@@ -128,7 +111,6 @@ function CarFilterForm() {
                   </button>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
