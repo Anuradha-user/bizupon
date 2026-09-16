@@ -1,58 +1,29 @@
 function CarOverview({ car }) {
-
+  const overviewData = [
+    { label: "Vehicle body number", value: car.chassisNo },
+    { label: "Car Brand", value: car.makers },
+    { label: "Body type", value: car.bodyType },
+    { label: "Year", value: car.registrationDate },
+    { label: "Mileage", value: car.mileage },
+    { label: "Engine displacement", value: car.cc },
+    { label: "Transmission", value: car.transmission },
+    { label: "Steering wheel", value: car.handle },
+    { label: "Fuel type", value: car.fuel },
+    { label: "Rating", value: "" },
+    { label: "Drive", value: car.drive },
+    { label: "Color", value: car.carcolor },
+  ];
   return (
     <div className="carOverviewBlock">
         <div className="carOverview">
             <h4 className="fw-medium">Car Overview</h4>
             <div className="carOverview-content">
-                <div className="overview-item">
-                    <p>Vehicle body number</p>
-                    <h6>W1K1186842N190268</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Car Brand</p>
-                    <h6>{car.makers}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Body type</p>
-                    <h6>Wagon</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Year</p>
-                    <h6>{car.registrationdate}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Mileage</p>
-                    <h6>{car.mileage}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Engine displacement</p>
-                    <h6>{car.cc}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Transmission</p>
-                    <h6>{car.transmission}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Steering wheel</p>
-                    <h6>{car.handle}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Fuel type</p>
-                    <h6>{car.fuel}</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Rating</p>
-                    <h6>4.5</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Drive</p>
-                    <h6>FF</h6>
-                </div>
-                <div className="overview-item">
-                    <p>Color</p>
-                    <h6>White</h6>
-                </div>
+               {overviewData.map((item, index) => (
+                    <div className="overview-item" key={index}>
+                        <p>{item.label}</p>
+                        <h6>{item.value}</h6>
+                    </div>
+                ))}
             </div>
         </div>
     </div>

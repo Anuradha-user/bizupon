@@ -5,8 +5,8 @@ import ProductListCard from "../../web-components/ProductListCard";
 import { IconChevronRight, IconLayoutGrid, IconList, IconChevronLeft } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
-import { getProductList } from "../../api/productApi,js";
 import { appendProducts, resetProducts, setError, setHasMore, setLoading, setNextPageLoading, setPage, setTotalProducts } from "../../redux/productSlice";
+import { getProductList } from "../../api/apiServices";
 
 
 const ProductListPage = () => {
@@ -68,6 +68,7 @@ const ProductListPage = () => {
 
         MaxPrice: searchParams.get("maxPrice") || "",
         PriceSortBy: sortType || "",
+        StockId: search || 0,
 
       };
       const response = await getProductList(params);
@@ -137,7 +138,14 @@ const ProductListPage = () => {
   ])
 
 
+useEffect(() => {
+  const delayDebounceSearch = setTimeout(() => {
 
+    fetchProducts(1, true);
+  }, 1200);
+
+  return () => clearTimeout(delayDebounceSearch);
+}, [search]);
   return (
 
     <div className="product-list">
@@ -229,13 +237,13 @@ const ProductListPage = () => {
                       </div>
                       {/**observer */}
                       <div ref={ref} />
- {nextPageLoading && (
-                <div className="text-center py-5">
-                  <div className="spinner-border text-success"></div>
-                  <p className="mt-2">Loading cars...</p>
-                </div>
-              )}
-                      
+                      {nextPageLoading && (
+                        <div className="text-center py-5">
+                          <div className="spinner-border text-success"></div>
+                          <p className="mt-2">Loading cars...</p>
+                        </div>
+                      )}
+
                       {/* PAGINATION */}
                       {/* <div className="pagination">
 

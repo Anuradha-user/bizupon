@@ -1,31 +1,42 @@
 export const baseURL = "https://192.168.10.199";
 
-let USER_AUTH = `${baseURL}:8012/api`;
-let USER_REG = `${baseURL}:8110/api`;
-let MasterApi = `${baseURL}:8111/api`;
-let PRODUCT = `${baseURL}:8111/api`;
+// let USER_AUTH = `${baseURL}/api`;
+let Authenication_API = `${baseURL}:8012/api`;
+let User_Management = `${baseURL}:8110/api`;
+let Web_Front = `${baseURL}:8111/api`;
 
-const ApiLayout = {
+
+const apiLayout = {
   // ****************** Auth Api ******************
-  login: `${USER_AUTH}/Account/Account`,
-  register: `${USER_REG}/User/Registration`,
-  emailVerification: `${USER_REG}/User/email-otp-verification`,
-  emailResendOtp: `${USER_REG}/User/email-otp-resend`,
+  login: `${Authenication_API}/Account/Account`,
+  register: `${User_Management}/User/Registration`,
+  emailVerification: `${User_Management}/User/email-otp-verification`,
 
-  logout: `${USER_AUTH}/Account/logout`,
-  refresh: `${USER_AUTH}/Account/refresh`,
-  signup: `${USER_AUTH}/Account/signup`,
-  CarData: `${MasterApi}/Home/GetDDLMaster`,
+  emailResendOtp: `${User_Management}/User/email-otp-resend`,
+ 
+  logout: `${Authenication_API}/Account/logout`,
+  refresh: `${Authenication_API}/Account/refresh`,
+  signup: `${Authenication_API}/Account/signup`,
 
 
+
+    // ****************** External API ******************
+productlist:`https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData`,
+product:`https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData`,
+productFilter:`https://jaishriganesha.com/BizuponInterview/api/Home/GetProductData`,
 
 
   // ****************** Product API ******************
 
-filterApi:`${PRODUCT}/Home/GetDDLMasterProductCounts`,
-productListing:`${PRODUCT}/Home/productList`,
-productApi:`${PRODUCT}/Home/GetUnSoldProductDetailsByProduct`
+filterApi:`${Web_Front}/Home/GetDDLMasterProductCounts`,
+productListing:`${Web_Front}/Home/productList`,
+productApi:`${Web_Front}/Home/GetUnSoldProductDetailsByProduct`,
+CarData: `${Web_Front}/Home/GetDDLMaster`,
 
-};
+}
 
-export default ApiLayout; 
+
+
+
+
+export default apiLayout;
