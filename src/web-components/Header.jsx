@@ -3,7 +3,8 @@ import logo from '../web-images/logo.svg';
 import React, { useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import ApiLayout from '../api/apiLayout';
+import apiLayout from '../api/ApiLayout';
+// import apiLayout from '../api/apiLayout';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Header = () => {
     }, []);
 
     const handleLogout = () => {
-        axios.post(ApiLayout.logout, {
+        axios.post(apiLayout.logout, {
             username: localStorage.getItem("userName"),
             role: localStorage.getItem("role"),
         }).catch((err) => console.error("Logout API failed:", err));
@@ -57,10 +58,10 @@ const Header = () => {
                             <div className="col-lg-4">
                                 <div className="topbar-info d-none d-lg-block">
                                     <ul className="social-list">
-                                        <li><Link to="#"><IconBrandFacebook /></Link></li>
-                                        <li><Link to="#"><IconBrandX /></Link></li>
-                                        <li><Link to="#"><IconBrandInstagram /></Link></li>
-                                        <li><Link to="#"><IconBrandWhatsapp /></Link></li>
+                                        <li><Link to="https://www.facebook.com/bizuponco/"  target="_blank"><IconBrandFacebook /></Link></li>
+                                        <li><Link to="https://twitter.com/bizuponco"  target="_blank"><IconBrandX /></Link></li>
+                                        <li><Link to="https://www.instagram.com/bizupon_/"  target="_blank"><IconBrandInstagram /></Link></li>
+                                        <li><Link to="https://api.whatsapp.com/send?phone=+818029561568"  target="_blank"><IconBrandWhatsapp /></Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -88,10 +89,10 @@ const Header = () => {
                                     ) : (
                                         <>
                                             <li className="nav-item">
-                                                <Link to="/register"><IconUserScan /> Register</Link>
+                                                <Link to="/auth"  state={{ type: "register" }}><IconUserScan /> Register</Link>
                                             </li>
                                             <li className="nav-item">
-                                                <Link to="/auth"><IconLogin2 /> Login</Link>
+                                                <Link to="/auth" state={{ type: "login" }}><IconLogin2 /> Login</Link>
                                             </li>
                                         </>
                                     )}
@@ -121,31 +122,31 @@ const Header = () => {
                                                 <ul className="submenu-double-line">
                                                     <li>
                                                         <h5>Brands</h5>
-                                                        <NavLink to="/product-list?makers=Toyota">Toyota</NavLink>
-                                                        <NavLink to="/product-list?makers=Nissan">Nissan</NavLink>
-                                                        <NavLink to="/product-list?makers=Honda">Honda</NavLink>
-                                                        <NavLink to="/product-list?makers=Suzuki">Suzuki</NavLink>
-                                                        <NavLink to="/product-list?makers=Subaru">Subaru</NavLink>
-                                                        <NavLink to="/product-list?makers=Mitsubishi">Mitsubishi</NavLink>
-                                                        <NavLink to="/product-list?makers=Volkswagen">Volkswagen</NavLink>
-                                                        <NavLink to="/product-list?makers=Audi">Audi</NavLink>
-                                                        <NavLink to="/product-list?makers=Mercedes">Mercedes</NavLink>
-                                                        <NavLink to="/product-list?makers=Land Rover">Land Rover</NavLink>
-                                                        <NavLink to="/product-list?makers=Ford">Ford</NavLink>
+                                                        <NavLink to="/product-list?makers=1">Toyota</NavLink>
+                                                        <NavLink to="/product-list?makers=2">Nissan</NavLink>
+                                                        <NavLink to="/product-list?makers=3">Honda</NavLink>
+                                                        <NavLink to="/product-list?makers=7">Suzuki</NavLink>
+                                                        <NavLink to="/product-list?makers=4">Subaru</NavLink>
+                                                        <NavLink to="/product-list?makers=6">Mitsubishi</NavLink>
+                                                        <NavLink to="/product-list?makers=25">Volkswagen</NavLink>
+                                                        <NavLink to="/product-list?makers=12">Audi</NavLink>
+                                                        <NavLink to="/product-list?makers=28">Mercedes</NavLink>
+                                                        <NavLink to="/product-list?makers=56">Land Rover</NavLink>
+                                                        <NavLink to="/product-list?makers=42">Ford</NavLink>
                                                     </li>
                                                     <li>
                                                         <h5>Body Type</h5>
-                                                        <NavLink to="/product-list?body=Sedan">Sedan</NavLink>
-                                                        <NavLink to="/product-list?body=Coupe">Coupe</NavLink>
-                                                        <NavLink to="/product-list?body=Hatchback">Hatchback</NavLink>
-                                                        <NavLink to="/product-list?body=Station Wagon">Station Wagon</NavLink>
-                                                        <NavLink to="/product-list?body=SUV">SUV</NavLink>
+                                                        <NavLink to="/product-list?body=1">Sedan</NavLink>
+                                                        <NavLink to="/product-list?body=5">Coupe</NavLink>
+                                                        <NavLink to="/product-list?body=8">Hatchback</NavLink>
+                                                        <NavLink to="/product-list?body=3">Station Wagon</NavLink>
+                                                        <NavLink to="/product-list?body=2">SUV</NavLink>
                                                         <NavLink to="/product-list?body=Pick Up">Pick Up</NavLink>
-                                                        <NavLink to="/product-list?body=Van">Van</NavLink>
-                                                        <NavLink to="/product-list?body=Wagon">Wagon</NavLink>
-                                                        <NavLink to="/product-list?body=Convertible">Convertible</NavLink>
-                                                        <NavLink to="/product-list?body=Bus">Bus</NavLink>
-                                                        <NavLink to="/product-list?body=Truck">Truck</NavLink>
+                                                        <NavLink to="/product-list">Van</NavLink>
+                                                        <NavLink to="/product-list?body=12">Wagon</NavLink>
+                                                        <NavLink to="/product-list">Convertible</NavLink>
+                                                        <NavLink to="/product-list">Bus</NavLink>
+                                                        <NavLink to="/product-list">Truck</NavLink>
                                                     </li>
                                                 </ul>
                                             </li>

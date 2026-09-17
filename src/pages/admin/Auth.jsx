@@ -6,19 +6,21 @@ import '../../web-css/WebStyle.css';
 import SignupForm from './SignupForm';
 import LoginForm from './loginForm';
 function Auth() {
+  const location = useLocation();
   
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(
+    location.state?.type !== "register"
+  );
  
   
-  const location = useLocation();
 
-  useEffect(() => {
-    if (location.pathname === "/auth") {
-      setShowLogin(true);
-    } else if (location.pathname === "/register") {
-      setShowLogin(false);
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname === "/auth") {
+  //     setShowLogin(true);
+  //   } else if (location.pathname === "/register") {
+  //     setShowLogin(false);
+  //   }
+  // }, [location.pathname]);
 
 
   

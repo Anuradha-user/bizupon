@@ -57,6 +57,7 @@ const ProductListPage = () => {
         ModelId: searchParams.getAll("model").join(","),
 
         FuelType: searchParams.getAll("fuel").join(",") || "",
+        BodyTypeId: searchParams.getAll("body").join(",") || "",
 
         CC: searchParams.get("cc") || "",
 

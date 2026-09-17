@@ -77,7 +77,7 @@ function TopBrand() {
                   <SwiperSlide key={brand.id}>
                     <div
                       className="vertical-product-card text-center"
-                      onClick={() => handleBrandClick(brand.name)}
+                      onClick={() => handleBrandClick(brand.id)}
                       style={{ cursor: "pointer" }}
                     >
                       <div className="thumbnail">

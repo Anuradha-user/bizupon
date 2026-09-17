@@ -6,10 +6,10 @@ import Select from "react-select";
 
 function CarFilterForm() {
   const navigate = useNavigate();
-  const { makers, model, fuelTypes, loading } = useSelector(
+  const { makers, model, fuelTypes, loading,bodyTypes } = useSelector(
     (state) => state.filters
   );
-
+console.log("bodyTypes:", bodyTypes);
   const [selectedMaker, setSelectedMaker] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [selectedFuel, setSelectedFuel] = useState(null);
