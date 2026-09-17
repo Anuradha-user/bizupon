@@ -1,136 +1,107 @@
-import { IconSearch } from "@tabler/icons-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import axios from "axios";
-import ApiLayout from "../api/apiLayout";
+import { IconSearch } from "@tabler/icons-react";
+import apiLayout from "../api/ApiLayout";
+import { setFilterLoading, setFilterData, setFilterError } from "../redux/filterSlice";
 
 function CarFilterForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [allModels, setAllModels] = useState([]);
-  const [makersOptions, setMakersOptions] = useState([]);
-  const [fuelsOptions, setFuelsOptions] = useState([]);
+  const { makers = [], model: allModels = [], fuelTypes = [], bodyTypes = [], loading } = useSelector(
+    (state) => state.filters
+  );
+  const [form1 , setform1] = useState ({maker: true})
+  const [form, setForm] = useState({ maker: null, model: null, fuel: null });
 
-  const [selectedMaker, setSelectedMaker] = useState(null);
-  const [selectedModel, setSelectedModel] = useState(null);
-  const [selectedFuel, setSelectedFuel] = useState(null);
-
-   const fetchMasterData = async () => {
-      try {
-        const response = await axios.get(ApiLayout.CarData);
-        const data = response.data?.data || {};
-
-        const formattedMakers = (data.lstmaker || [])
-          .filter((m) => m.name?.trim())
-          .map((m) => ({
-            value: m.name,
-            label: m.name,
-            id: m.id,
-          }));
-        setMakersOptions(formattedMakers);
-
-        setAllModels(data.lstmodel || []);
-
-        const uniqueFuelsMap = new Map();
-        (data.lstfuletype || []).forEach((f) => {
-          const name = f.name?.trim();
-          if (name && name !== "-" && !uniqueFuelsMap.has(name)) {
-            uniqueFuelsMap.set(name, { value: name, label: name });
-          }
-        });
-        setFuelsOptions(Array.from(uniqueFuelsMap.values()));
-
-      } catch (err) {
-        console.error("Error fetching Car Master Data:", err);
-      }
-    };
-
+  // Fetch Master Data once if Redux is empty
   useEffect(() => {
-   
-    fetchMasterData();
-  }, []);
+    if (makers.length || allModels.length) return;
 
-  const modelsOptions = selectedMaker
-    ? Array.from(
-        new Map(
-          allModels
-            .filter(
-              (m) =>
-                String(m.makerId) === String(selectedMaker.id) &&
-                m.name?.trim()
-            )
-            .map((m) => [m.name, { value: m.name, label: m.name }])
-        ).values()
-      )
-    : [];
+    dispatch(setFilterLoading(true));
+    axios.get(apiLayout.CarData)
+      .then((res) => dispatch(setFilterData(res.data?.data || {})))
+      .catch((err) => dispatch(setFilterError(err.message || "Fetch failed")));
+  }, [dispatch, makers.length, allModels.length]);
 
+  // Dropdown options
+  const makersOptions = useMemo(() =>
+    makers.filter((m) => m.name?.trim()).map((m) => ({ value: m.name, label: m.name, id: m.id })),
+    [makers]
+  );
+
+  const fuelsOptions = useMemo(() =>
+    Array.from(new Set(fuelTypes.map((f) => f.name?.trim()).filter((n) => n && n !== "-")))
+      .map((name) => ({ value: name, label: name })),
+    [fuelTypes]
+  );
+
+  const modelsOptions = useMemo(() => {
+    if (!form.maker) return [];
+    const filtered = allModels.filter((m) => String(m.makerId) === String(form.maker.id) && m.name?.trim());
+    return Array.from(new Set(filtered.map((m) => m.name))).map((name) => ({ value: name, label: name }));
+  }, [form.maker, allModels]);
+
+  // Handle Submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    const params = new URLSearchParams();
+    if (form.maker?.value) params.append("makers", form.maker.value);
+    if (form.model?.value) params.append("model", form.model.value);
+    if (form.fuel?.value) params.append("fuel", form.fuel.value);
 
-    const queryParams = new URLSearchParams();
-    if (selectedMaker?.value) queryParams.append("makers", selectedMaker.value);
-    if (selectedModel?.value) queryParams.append("model", selectedModel.value);
-    if (selectedFuel?.value) queryParams.append("fuel", selectedFuel.value);
-
-    navigate(`/product-list?${queryParams.toString()}`);
+    navigate(`/product-list?${params.toString()}`);
   };
 
   return (
     <section className="search-form">
       <div className="container">
         <div className="form-block">
-          <div className="row">
-            <div className="col-lg-12">
-              <h1 className="form-title">Let's Find Your Perfect Car</h1>
-
-              <form onSubmit={handleSubmit} className="row mt-4">
-                <div className="col-md-3">
-                  <Select
-                    options={makersOptions}
-                    value={selectedMaker}
-                    placeholder="Select Maker"
-                    onChange={(option) => {
-                      setSelectedMaker(option);
-                      setSelectedModel(null); 
-                    }}
-                    isSearchable
-                    isClearable
-                  />
-                </div>
-
-                <div className="col-md-3">
-                  <Select
-                    options={modelsOptions}
-                    value={selectedModel}
-                    placeholder="Select Model"
-                    onChange={(option) => setSelectedModel(option)}
-                    isSearchable
-                    isClearable
-                  />
-                </div>
-
-                <div className="col-md-3">
-                  <Select
-                    options={fuelsOptions}
-                    value={selectedFuel}
-                    placeholder="Select Fuel"
-                    onChange={(option) => setSelectedFuel(option)}
-                    isSearchable
-                    isClearable
-                  />
-                </div>
-
-                <div className="col-md-3">
-                  <button type="submit" className="btn theme-btn w-100">
-                    <IconSearch width={18} strokeWidth="3" className="me-1" />
-                    Apply Filter
-                  </button>
-                </div>
-              </form>
-
+          <h1 className="form-title">Let's Find Your Perfect Car</h1>
+          <form onSubmit={handleSubmit} className="row mt-4">
+            <div className="col-md-3">
+              <Select
+                options={makersOptions}
+                value={form.maker}
+                placeholder="Select Maker"
+                isLoading={loading}
+                onChange={(opt) => setForm({ maker: opt, model: null, fuel: form.fuel })}
+                isSearchable isClearable
+              />
             </div>
-          </div>
+
+            <div className="col-md-3">
+              <Select
+                options={modelsOptions}
+                value={form.model}
+                placeholder="Select Model"
+                isDisabled={!form.maker}
+                onChange={(opt) => setForm((prev) => ({ ...prev, model: opt }))}
+                isSearchable isClearable
+              />
+            </div>
+
+            <div className="col-md-3">
+              <Select
+                options={fuelsOptions}
+                value={form.fuel}
+                placeholder="Select Fuel"
+                isLoading={loading}
+                onChange={(opt) => setForm((prev) => ({ ...prev, fuel: opt }))}
+                isSearchable isClearable
+              />
+            </div>
+
+            <div className="col-md-3">
+              <button type="submit" className="btn theme-btn w-100">
+                <IconSearch width={18} strokeWidth="3" className="me-1" />
+                Apply Filter
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
