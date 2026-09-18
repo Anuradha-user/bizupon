@@ -48,16 +48,12 @@ const carStatusOptions = [
     { id: '7', name: 'Shipped' },
     { id: '8', name: 'Delivered' },
     { id: '9', name: 'Auction Cancel' }
-    // { id: '0', name: 'In Auction' }
-    // { id: '0', name: 'Auction Sold' }
-    // { id: '0', name: 'Local Sale' }
 ];
 
 
 
 
 function ViewPurchase() {
-
     const [masterformValue, setMasterformValue] = useState({
         "chassis": "",
         "urgent": 0,
@@ -72,15 +68,13 @@ function ViewPurchase() {
         "registrationYear": 0,
         "manufactureDate": "",
         "statusId": 3,
-        "carstatus": 100,
+        "carstatus": 0,
         "productTypeII": "A",
         "sessionUID": 0,
         "sessionLID": 1,
         "pageNo": 1,
-        "pagesize": 10
+        "pagesize": 50
     });
-
-
 
 
     const navigate = useNavigate();
@@ -158,7 +152,7 @@ function ViewPurchase() {
             "registrationYear": 0,
             "manufactureDate": "",
             "statusId": 3,
-            "carstatus": 100,
+            "carstatus": 0,
             "productTypeII": "A",
             "sessionUID": 0,
             "sessionLID": 1,
@@ -169,12 +163,24 @@ function ViewPurchase() {
 
     }
 
-    const fetchTableData = async () => {
+  
+
+    // Pagination calculations
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(tableData.length / itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    };
+
+      const fetchTableData = async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('accessToken');
-            const formatDate = (date) => date ? date.toISOString().split('T')[0] : "";
-
             const payload = masterformValue
 
             const res = await axios.post(apiLayout.viewPurchase, payload, {
@@ -196,19 +202,6 @@ function ViewPurchase() {
             setLoading(false);
         }
     };
-
-    // Pagination calculations
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(tableData.length / itemsPerPage);
-
-    const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
-        }
-    };
-
     return (
         <div className="row">
             <div className="col-lg-12 col-12">
@@ -299,17 +292,12 @@ function ViewPurchase() {
                                     list={masterListFormData?.auctions}
                                     onSelect={(value) => {
                                         const auctionId = Number(value);
-                                        console.log("auctionId", auctionId);
-
-
-                                        // update form
                                         setMasterformValue((prev) => ({
                                             ...prev,
                                             auctionId,
                                             auctionYardId: 0, // clear previous yard
                                         }));
 
-                                        // call API
                                         if (auctionId) {
                                             fetchAuctionYard(auctionId);
                                         }
