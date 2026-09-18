@@ -17,7 +17,6 @@ function Blogs() {
     axios
       .get("https://jaishriganesha.com/bizupon-blog/api/Blog/GetNewsNBlog")
       .then((res) => {
-        console.log("API Response:", res.data);
 
         const blogArray = res?.data?.data?.lstBlogs || res?.data?.lstBlogs;
 
@@ -51,7 +50,7 @@ function Blogs() {
                   spaceBetween={25}
                   slidesPerView={3}
                   autoplay={{
-                    delay: 1000,
+                    delay: 3000,
                     disableOnInteraction: false,
                   }}
                   navigation={{

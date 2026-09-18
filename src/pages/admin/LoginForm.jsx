@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ApiLayout from '../../api/apiLayout';
+// import apiLayout from '../../api/ApiLayout';
 import '../../web-css/WebStyle.css';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import apiLayout from '../../api/ApiLayout';
 const LoginForm = () => {
   const navigate = useNavigate();
   const [error, setError] = useState("");
@@ -35,7 +36,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(ApiLayout.login, {
+      const response = await axios.post(apiLayout.login, {
         userName: form.userName,
         password: form.password,
         mobileDeviceId: "web",

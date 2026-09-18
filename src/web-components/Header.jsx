@@ -1,9 +1,10 @@
-import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan, IconX, IconLogout2, IconUserCircle } from '@tabler/icons-react'
+import { IconBrandFacebook, IconBrandInstagram, IconBrandWhatsapp, IconBrandX, IconChevronDown, IconLogin2, IconMenu2, IconPhone, IconTruckDelivery, IconUserScan, IconX, IconLogout2, IconUserCircle } from '@tabler/icons-react';
 import logo from '../web-images/logo.svg';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
-import apiLayout from '../api/ApiLayout';
+import apiLayout from '../api/apiLayout';
 // import apiLayout from '../api/apiLayout';
 
 const Header = () => {
@@ -11,6 +12,9 @@ const Header = () => {
     const [isSticky, setIsSticky] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+
+    // Get filter options from Redux state
+    const { makers = [], bodyTypes = [], loading: loadingStock } = useSelector((state) => state.filters || {});
 
     useEffect(() => {
         const userName = localStorage.getItem("userName");
@@ -49,6 +53,19 @@ const Header = () => {
         navigate("/");
     };
 
+    // Helper functions to safely extract brand and body type names from dynamic payloads
+    const getMakerName = (item) => {
+        if (typeof item === 'string') return item;
+        if (!item || typeof item !== 'object') return '';
+        return item.maker_Name || item.makerName || item.maker || item.name || item.title || '';
+    };
+
+    const getBodyTypeName = (item) => {
+        if (typeof item === 'string') return item;
+        if (!item || typeof item !== 'object') return '';
+        return item.bodyType || item.bodyTypeName || item.body_type || item.name || item.title || '';
+    };
+
     return (
         <>
             <header className={`header position-relative z-3 ${isSticky ? "sticky-on" : ""}`}>
@@ -75,10 +92,8 @@ const Header = () => {
                                         <>
                                             <li className="nav-item">
                                                 <Link className="d-flex align-items-center gap-1 ">
-                                            <IconUserCircle /> {user.fullName || user.userName}
-                                        </Link>
- 
-                                               
+                                                    <IconUserCircle /> {user.fullName || user.userName}
+                                                </Link>
                                             </li>
                                             <li className="nav-item">
                                                 <Link to="#" onClick={handleLogout}>
@@ -118,35 +133,55 @@ const Header = () => {
                                                 <NavLink to="/about-us" className={({ isActive }) => isActive ? "active" : ""}>About Us</NavLink>
                                             </li>
                                             <li className="has-submenu">
-                                                <NavLink to="/product-list" className={({ isActive }) => isActive ? "active" : ""}>Stock List<span className="ms-1 float-end"><IconChevronDown /></span></NavLink>
-                                                <ul className="submenu-double-line">
-                                                    <li>
-                                                        <h5>Brands</h5>
-                                                        <NavLink to="/product-list?makers=1">Toyota</NavLink>
-                                                        <NavLink to="/product-list?makers=2">Nissan</NavLink>
-                                                        <NavLink to="/product-list?makers=3">Honda</NavLink>
-                                                        <NavLink to="/product-list?makers=7">Suzuki</NavLink>
-                                                        <NavLink to="/product-list?makers=4">Subaru</NavLink>
-                                                        <NavLink to="/product-list?makers=6">Mitsubishi</NavLink>
-                                                        <NavLink to="/product-list?makers=25">Volkswagen</NavLink>
-                                                        <NavLink to="/product-list?makers=12">Audi</NavLink>
-                                                        <NavLink to="/product-list?makers=28">Mercedes</NavLink>
-                                                        <NavLink to="/product-list?makers=56">Land Rover</NavLink>
-                                                        <NavLink to="/product-list?makers=42">Ford</NavLink>
+                                                <NavLink to="/product-list" className={({ isActive }) => isActive ? "active" : ""}>
+                                                    Stock List<span className="ms-1 float-end"><IconChevronDown /></span>
+                                                </NavLink>
+                                                
+                                                {/* Aligned Submenu Dropdown */}
+                                                <ul className="submenu-double-line d-flex flex-row flex-nowrap gap-3 p-3" 
+                                                    style={{ minWidth: '420px', listStyle: 'none', margin: 0 }}>
+                                                    
+                                                    {/* Brands Column */}
+                                                    <li className="flex-fill" style={{ width: '50%', listStyle: 'none', padding: 0 }}>
+                                                        <h5 className="mb-2 pb-1 border-bottom" style={{ fontSize: '15px', fontWeight: 'bold' }}>Brands</h5>
+                                                        <div style={{ maxHeight: '280px', overflowY: 'auto', paddingRight: '6px' }}>
+                                                            {loadingStock ? (
+                                                                <span>Loading...</span>
+                                                            ) : (
+                                                                Array.isArray(makers) && makers.map((item, idx) => {
+                                                                    const brandName = getMakerName(item);
+                                                                    if (!brandName) return null;
+                                                                    return (
+                                                                        <NavLink key={idx} to={`/product-list?makers=${encodeURIComponent(brandName)}`} className="d-block py-1 text-decoration-none">
+                                                                            {brandName}
+                                                                        </NavLink>
+                                                                    );
+                                                                })
+                                                            )}
+                                                        </div>
                                                     </li>
-                                                    <li>
-                                                        <h5>Body Type</h5>
-                                                        <NavLink to="/product-list?body=1">Sedan</NavLink>
-                                                        <NavLink to="/product-list?body=5">Coupe</NavLink>
-                                                        <NavLink to="/product-list?body=8">Hatchback</NavLink>
-                                                        <NavLink to="/product-list?body=3">Station Wagon</NavLink>
-                                                        <NavLink to="/product-list?body=2">SUV</NavLink>
-                                                        <NavLink to="/product-list?body=Pick Up">Pick Up</NavLink>
-                                                        <NavLink to="/product-list">Van</NavLink>
-                                                        <NavLink to="/product-list?body=12">Wagon</NavLink>
-                                                        <NavLink to="/product-list">Convertible</NavLink>
-                                                        <NavLink to="/product-list">Bus</NavLink>
-                                                        <NavLink to="/product-list">Truck</NavLink>
+
+                                                    {/* Vertical Separator Line */}
+                                                    <div style={{ width: '1px', backgroundColor: '#e5e7eb', margin: '0px' }}></div>
+
+                                                    {/* Body Type Column */}
+                                                    <li className="flex-fill" style={{ width: '50%', listStyle: 'none', padding: 0 }}>
+                                                        <h5 className="mb-1 pb-1 border-bottom" style={{ fontSize: '15px', fontWeight: 'bold' }}>Body Type</h5>
+                                                        <div style={{ maxHeight: '280px', overflowY: 'auto', paddingRight: '6px' }}>
+                                                            {loadingStock ? (
+                                                                <span>Loading...</span>
+                                                            ) : (
+                                                                Array.isArray(bodyTypes) && bodyTypes.map((item, idx) => {
+                                                                    const bodyName = getBodyTypeName(item);
+                                                                    if (!bodyName) return null;
+                                                                    return (
+                                                                        <NavLink key={idx} to={`/product-list?body=${encodeURIComponent(bodyName)}`} className="d-block py-1 text-decoration-none">
+                                                                            {bodyName}
+                                                                        </NavLink>
+                                                                    );
+                                                                })
+                                                            )}
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -168,13 +203,13 @@ const Header = () => {
                                                 </ul>
                                             </li>
                                             <li>
-                                                <NavLink to="javascript:void(0)" className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
+                                                <NavLink to="/Services" className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
                                             </li>
                                             <li>
                                                 <NavLink to="/blogs" className={({ isActive }) => isActive ? "active" : ""}>Blogs</NavLink>
                                             </li>
                                             <li>
-                                                <NavLink to="javascript:void(0)" className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
+                                                <NavLink to="/videos" className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
                                             </li>
                                         </ul>
                                     </nav>
@@ -198,48 +233,50 @@ const Header = () => {
                     </div>
                 </div>
             </header>
+
+            {/* Mobile Nav */}
             <div className={`offcanvas_menu position-fixed ${isMenuOpen ? "active" : ""}`}>
                 <div className="mobile-menu d-md-block d-lg-block d-xl-none">
                     <button className="offcanvas-close" onClick={() => setIsMenuOpen(false)}><IconX /></button>
                     <NavLink to="#" className="d-inline-block mb-2"><img src={logo} alt="logo" /></NavLink>
                     <nav className="mobile-menu-wrapper mt-2">
                         <ul>
-                            <li className="">
-                                <NavLink to="javascript:void(0)" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
+                            <li>
+                                <NavLink to="/" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
                             </li>
-                            <li className="">
-                                <NavLink to="javascript:void(0)" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>About Us</NavLink>
+                            <li>
+                                <NavLink to="/about-us" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>About Us</NavLink>
                             </li>
                             <li className="has-submenu">
                                 <NavLink to="/product-list" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Stock List<span className="ms-1 fs-xs float-end"><IconChevronDown /></span></NavLink>
-                                <ul className="submenu-double-line">
-                                    <li>
-                                        <h5>Brands</h5>
-                                        <NavLink to="">Toyota</NavLink>
-                                        <NavLink to="">Nissan</NavLink>
-                                        <NavLink to="">Honda</NavLink>
-                                        <NavLink to="">Suzuki</NavLink>
-                                        <NavLink to="">Subaru</NavLink>
-                                        <NavLink to="">Mitsubishi</NavLink>
-                                        <NavLink to="">Volkswagen</NavLink>
-                                        <NavLink to="">Audi</NavLink>
-                                        <NavLink to="">Mercedes</NavLink>
-                                        <NavLink to="">Land Rover</NavLink>
-                                        <NavLink to="">Ford</NavLink>
+                                <ul className="submenu-double-line d-flex flex-row p-2 gap-2" style={{ listStyle: 'none' }}>
+                                    <li style={{ width: '50%', padding: 0 }}>
+                                        <h5 className="mb-2 border-bottom pb-1">Brands</h5>
+                                        <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                                            {Array.isArray(makers) && makers.map((item, idx) => {
+                                                const brandName = getMakerName(item);
+                                                if (!brandName) return null;
+                                                return (
+                                                    <NavLink key={idx} to={`/product-list?makers=${encodeURIComponent(brandName)}`} onClick={() => setIsMenuOpen(false)} className="d-block py-1">
+                                                        {brandName}
+                                                    </NavLink>
+                                                );
+                                            })}
+                                        </div>
                                     </li>
-                                    <li>
-                                        <h5>Body Type</h5>
-                                        <NavLink to="">Sedan</NavLink>
-                                        <NavLink to="">Coupe</NavLink>
-                                        <NavLink to="">Hatchback</NavLink>
-                                        <NavLink to="">Station Wagon</NavLink>
-                                        <NavLink to="">SUV</NavLink>
-                                        <NavLink to="">Pick Up</NavLink>
-                                        <NavLink to="">Van</NavLink>
-                                        <NavLink to="">Wagon</NavLink>
-                                        <NavLink to="">Convertible</NavLink>
-                                        <NavLink to="">Bus</NavLink>
-                                        <NavLink to="">Truck</NavLink>
+                                    <li style={{ width: '50%', padding: 0 }}>
+                                        <h5 className="mb-2 border-bottom pb-1">Body Type</h5>
+                                        <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                                            {Array.isArray(bodyTypes) && bodyTypes.map((item, idx) => {
+                                                const bodyName = getBodyTypeName(item);
+                                                if (!bodyName) return null;
+                                                return (
+                                                    <NavLink key={idx} to={`/product-list?body=${encodeURIComponent(bodyName)}`} onClick={() => setIsMenuOpen(false)} className="d-block py-1">
+                                                        {bodyName}
+                                                    </NavLink>
+                                                );
+                                            })}
+                                        </div>
                                     </li>
                                 </ul>
                             </li>
@@ -260,14 +297,14 @@ const Header = () => {
                                     <li><NavLink to="">By Auction</NavLink></li>
                                 </ul>
                             </li>
-                            <li className="">
-                                <NavLink to="" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
+                            <li>
+                                <NavLink to="/Services" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Services</NavLink>
                             </li>
-                            <li className="">
+                            <li>
                                 <NavLink to="/blogs" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Blogs</NavLink>
                             </li>
-                            <li className="">
-                                <NavLink to="" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
+                            <li>
+                                <NavLink to="/videos" onClick={() => setIsMenuOpen(false)} className={({ isActive }) => isActive ? "active" : ""}>Video</NavLink>
                             </li>
                         </ul>
                     </nav>
@@ -288,7 +325,7 @@ const Header = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
 export default Header;

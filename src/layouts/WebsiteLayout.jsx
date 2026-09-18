@@ -22,7 +22,9 @@ function WebsiteLayout() {
     <>
       <Header />
       <Outlet />
+
       <Footer /> 
+
     </>
   );
 }

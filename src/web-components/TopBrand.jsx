@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ApiLayout from "../api/apiLayout";
+import apilayout from "../api/ApiLayout";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -16,7 +16,7 @@ function TopBrand() {
   const navigate = useNavigate();
   const fetchBrands = async () => {
       try {
-        const response = await axios.get(ApiLayout.CarData);
+        const response = await axios.get(apilayout.CarData);
         
         // Target lstmaker safely inside response.data.data
         const makersList = response.data?.data?.lstmaker || [];
@@ -71,7 +71,7 @@ function TopBrand() {
                 // Prepend base URL when flag filename exists, else fallback image
                 const imageUrl = brand.flag 
                   ? `${IMAGE_BASE_URL}${brand.flag}` 
-                  : "https://via.placeholder.com/100?text=No+Image";
+                  : "/images/no-image.png";
 
                 return (
                   <SwiperSlide key={brand.id}>
@@ -91,7 +91,7 @@ function TopBrand() {
                     </div>
                   </SwiperSlide>
                 );
-              })}
+              })} 
             </Swiper>
           )}
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import logo from '../../web-images/logo.svg';
 import { IconLogin } from "@tabler/icons-react";
 import "../../admin-css/Login.css";
-import ApiLayout from "../../api/apiLayout";
+import apilayout from "../../api/ApiLayout";
 
 function Login() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await axios.post(ApiLayout.login, {
+      const response = await axios.post(apilayout.login, {
         userName: form.email,
         password: form.password,
         mobileDeviceId: "",

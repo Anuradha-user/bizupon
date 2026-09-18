@@ -79,7 +79,7 @@ function Categories() {
       setCategories(res.data.data || res.data)
     }
     catch (error) {
-      console.error("Error fetching data:", error)
+      console.error("Error fetching data:", error) ;
     }
   }
 
@@ -198,10 +198,8 @@ function Categories() {
       );
     }
   };
-
-  // edit category
   const handleEdit = (item) => {
-    console.log(item); // id aa raha hai ya catID dekh lo
+    console.log(item); 
     setIsEdit(true);
     setEditCategoryId(item.catID || item.id);
     setFormData({
