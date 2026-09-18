@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import DatePicker from "react-datepicker";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { getViewPurchaseMasterList, getauctionYardData } from '../../../api/apiServices';
+import { getViewPurchaseListData, getViewPurchaseMasterList, getauctionYardData } from '../../../api/apiServices';
 import SelectedField from '../../../base-components/SelectedField';
-import apiLayout from '../../../api/ApiLayout';
+import apiLayout from '../../../api/apiLayout';
 import Table from '../../../web-components/Table';
 import {
     IconCirclePlusFilled,
@@ -282,15 +282,10 @@ function ViewPurchase() {
       const fetchTableData = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('accessToken');
             const payload = masterformValue
 
-            const res = await axios.post(apiLayout.viewPurchase, payload, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+           
+            const res=await getViewPurchaseListData(payload);
 
             if (res.data && res.data.isSuccess) {
                 setTableData(res.data.data.lstProduct || []);

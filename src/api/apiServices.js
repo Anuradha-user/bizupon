@@ -85,3 +85,9 @@ export const getauctionYardData = (id) =>{
     },
   });
 }
+
+
+export const getViewPurchaseListData = (payload = {}) => {
+
+return api.post(apiLayout.viewPurchase, payload);
+};
