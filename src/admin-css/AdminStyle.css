@@ -428,6 +428,9 @@ ul.user-menu li a img{
 .table-card .card-body .table tr:last-child td{
     border: none;
 }
+.table-card .card-body .reusable-table tr:last-child td{
+    border: 1px solid #dee2e6;
+}
 .datatable-table td, .table td{
     border-bottom: none;
     /* white-space: nowrap; */

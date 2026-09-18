@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
 import DatePicker from "react-datepicker";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getViewPurchaseMasterList, getauctionYardData } from '../../../api/apiServices';
 import SelectedField from '../../../base-components/SelectedField';
-import apiLayout from '../../../api/apiLayout';
+import apiLayout from '../../../api/ApiLayout';
+import Table from '../../../web-components/Table';
 import {
     IconCirclePlusFilled,
     IconEdit,
@@ -16,9 +16,7 @@ import {
     IconBell,
     IconHistory,
     IconLetterT,
-    IconLetterI,
-    IconChevronLeft,
-    IconChevronRight
+    IconLetterI
 } from '@tabler/icons-react';
 
 const productTypeTwoOptions = [
@@ -48,6 +46,127 @@ const carStatusOptions = [
     { id: '7', name: 'Shipped' },
     { id: '8', name: 'Delivered' },
     { id: '9', name: 'Auction Cancel' }
+];
+
+const displayValue = (value) => value === null || value === undefined || value === '' ? 'N/A' : value;
+
+const purchaseTableColumns = [
+    {
+        header: <input type="checkbox" className="form-check-input" />,
+        key: 'select',
+        headerClassName: 'text-center',
+        style: { width: '38px' },
+        className: 'text-center',
+        render: () => <input type="checkbox" className="form-check-input" />,
+    },
+    {
+        header: 'S.NO.',
+        key: 'serialNumber',
+        style: { width: '45px' },
+        render: (_item, _index, absoluteIndex) => absoluteIndex + 1,
+    },
+    {
+        header: 'UID',
+        key: 'uid',
+        style: { minWidth: '180px', maxWidth: '230px' },
+        className: 'fw-normal text-wrap',
+        tdStyle: { wordBreak: 'break-word', lineHeight: '1.3' },
+        render: (item) => displayValue(item.uid),
+    },
+    {
+        header: 'PRODUCT',
+        key: 'productName',
+        style: { minWidth: '110px' },
+        className: 'fw-bold text-dark',
+        render: (item) => displayValue(item.productName),
+    },
+    {
+        header: 'CHASSIS',
+        key: 'chassisNo',
+        style: { minWidth: '120px' },
+        className: 'fw-bold',
+        tdStyle: { color: '#5cb85c' },
+        render: (item) => displayValue(item.chassisNo),
+    },
+    {
+        header: 'SOLD',
+        key: 'saleCountry',
+        style: { minWidth: '80px' },
+        className: 'text-uppercase',
+        render: (item) => displayValue(item.saleCountry),
+    },
+    {
+        header: 'URGENT',
+        key: 'urgent',
+        style: { minWidth: '70px' },
+        render: (item) => (
+            <>
+                <div className="fw-semibold">{displayValue(item.urgent)}</div>
+                <div className="text-primary small" style={{ fontSize: '11px' }}>{displayValue(item.proGradeductName)}</div>
+            </>
+        ),
+    },
+    {
+        header: 'P_I',
+        key: 'pItype',
+        style: { minWidth: '80px' },
+        render: (item) => (
+            <>
+                <div className="fw-bold text-dark">{displayValue(item.pItype)}</div>
+                <div className="text-muted" style={{ fontSize: '11px' }}>
+                    {[displayValue(item.cc), displayValue(item.ctype)].join('/')}
+                </div>
+            </>
+        ),
+    },
+    {
+        header: 'R DATE',
+        key: 'rgdate',
+        style: { minWidth: '90px' },
+        className: 'text-nowrap',
+        render: (item) => displayValue(item.rgdate || item.rDate),
+    },
+    {
+        header: 'M DATE',
+        key: 'mdate',
+        style: { minWidth: '90px' },
+        className: 'text-nowrap',
+        render: (item) => displayValue(item.mdate || item.mDate),
+    },
+    {
+        header: 'STATUS',
+        key: 'status',
+        style: { minWidth: '90px' },
+        render: (item) => (
+            <span className="py-1" style={{ fontSize: '11px' }}>
+                {displayValue(item.status)}
+            </span>
+        ),
+    },
+    {
+        header: 'ACTION',
+        key: 'actions',
+        headerClassName: 'text-center',
+        style: { width: '125px' },
+        className: 'px-2',
+        render: () => (
+            <div className="d-flex flex-column gap-1 align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                    <button title="Edit" className="btn btn-link p-0 text-warning"><IconEdit size={16} /></button>
+                    <button title="Yen" className="btn btn-link p-0 text-success"><IconCurrencyYen size={16} /></button>
+                    <button title="Dollar" className="btn btn-link p-0 text-success"><IconCurrencyDollar size={16} /></button>
+                    <button title="Send" className="btn btn-link p-0 text-primary"><IconSend size={16} /></button>
+                    <button title="Delete" className="btn btn-link p-0 text-danger"><IconTrash size={16} /></button>
+                </div>
+                <div className="d-flex align-items-center gap-2">
+                    <button title="Notification" className="btn btn-link p-0 text-info"><IconBell size={16} /></button>
+                    <button title="History" className="btn btn-link p-0 text-danger"><IconHistory size={16} /></button>
+                    <button title="Inspection" className="btn btn-link p-0 text-success"><IconLetterT size={16} /></button>
+                    <button title="Images" className="btn btn-link p-0 text-primary"><IconLetterI size={16} /></button>
+                </div>
+            </div>
+        ),
+    },
 ];
 
 
@@ -82,8 +201,6 @@ function ViewPurchase() {
     const [isSubmit, setIsSubmit] = useState(false);
 
     const [loading, setLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
 
 
 
@@ -162,21 +279,6 @@ function ViewPurchase() {
         setTableData([])
 
     }
-
-  
-
-    // Pagination calculations
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(tableData.length / itemsPerPage);
-
-    const handlePageChange = (newPage) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
-        }
-    };
-
       const fetchTableData = async () => {
         setLoading(true);
         try {
@@ -434,117 +536,12 @@ function ViewPurchase() {
                 </div>
                 <div className="card table-card overflow-hidden">
                     <div className="card-body">
-                        <div className="table-responsive">
-                            <table className="table table-bordered border-bottom align-middle mb-0" style={{ fontSize: '13px' }}>
-                                <thead style={{ backgroundColor: '#fdfdfd', color: '#070707', fontSize: '11px', letterSpacing: '0.5px' }}>
-                                    <tr>
-                                        <th className="text-center" style={{ width: '38px' }}><input type="checkbox" className="form-check-input" /></th>
-                                        <th style={{ width: '45px' }}>S.NO.</th>
-                                        <th style={{ minWidth: '180px', maxWidth: '230px' }}>UID</th>
-                                        <th style={{ minWidth: '110px' }}>PRODUCT</th>
-                                        <th style={{ minWidth: '120px' }}>CHASSIS</th>
-                                        <th style={{ minWidth: '80px' }}>SOLD</th>
-                                        <th style={{ minWidth: '70px' }}>URGENT</th>
-                                        <th style={{ minWidth: '80px' }}>P_I</th>
-                                        <th style={{ minWidth: '90px' }}>R DATE</th>
-                                        <th style={{ minWidth: '90px' }}>M DATE</th>
-                                        <th style={{ minWidth: '90px' }}>STATUS</th>
-                                        <th className="text-center" style={{ width: '125px' }}>ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan="12" className="text-center py-4">
-                                                <div className="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
-                                                Loading...
-                                            </td>
-                                        </tr>
-                                    ) : currentItems.length > 0 ? (
-                                        currentItems.map((item, index) => (
-                                            <tr key={item.id || index}>
-                                                <td className="text-center"><input type="checkbox" className="form-check-input" /></td>
-                                                <td>{indexOfFirstItem + index + 1}</td>
-                                                <td className="fw-normal text-wrap" style={{ wordBreak: 'break-word', lineHeight: '1.3' }}>
-                                                    {item.uid || 'N/A'}
-                                                </td>
-                                                <td className="fw-bold text-dark">{item.productName || 'N/A'}</td>
-                                                <td className="fw-bold" style={{ color: '#5cb85c' }}>{item.chassisNo || 'N/A'}</td>
-                                                <td className="text-uppercase">{item.saleCountry || 'N/A'}</td>
-                                                <td>
-                                                    <div className="fw-semibold">{item.urgent || 'N/A'}</div>
-                                                    <div className="text-primary small" style={{ fontSize: '11px' }}>{item.proGradeductName || 'N/A'}</div>
-                                                </td>
-                                                <td>
-                                                    <div className="fw-bold text-dark">{item.pItype || 'N/A'}</div>
-                                                    <div className="text-muted" style={{ fontSize: '11px' }}>
-                                                        {[item.cc || 'N/A', item.ctype || 'N/A'].filter(Boolean).join('/')}
-                                                    </div>
-                                                </td>
-                                                <td className="text-nowrap">{item.rgdate || item.rDate || '2023-03-16'}</td>
-                                                <td className="text-nowrap">{item.mdate || item.mDate || '2023-03-15'}</td>
-                                                <td>
-                                                    <span className="   py-1" style={{ fontSize: '11px' }}>
-                                                        {item.status || 'DE-Active'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-2">
-                                                    {/* 2-Line Action Icons Layout */}
-                                                    <div className="d-flex flex-column gap-1 align-items-center">
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <button title="Edit" className="btn btn-link p-0 text-warning"><IconEdit size={16} /></button>
-                                                            <button title="Yen" className="btn btn-link p-0 text-success"><IconCurrencyYen size={16} /></button>
-                                                            <button title="Dollar" className="btn btn-link p-0 text-success"><IconCurrencyDollar size={16} /></button>
-                                                            <button title="Send" className="btn btn-link p-0 text-primary"><IconSend size={16} /></button>
-                                                            <button title="Delete" className="btn btn-link p-0 text-danger"><IconTrash size={16} /></button>
-                                                        </div>
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <button title="Notification" className="btn btn-link p-0 text-info"><IconBell size={16} /></button>
-                                                            <button title="History" className="btn btn-link p-0 text-danger"><IconHistory size={16} /></button>
-                                                            <button title="Inspection" className="btn btn-link p-0 text-success"><IconLetterT size={16} /></button>
-                                                            <button title="Images" className="btn btn-link p-0 text-primary"><IconLetterI size={16} /></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="12" className="text-center py-4 text-muted">No Data Found</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                        {!loading && tableData.length > 0 && (
-                            <div className="d-flex justify-content-between align-items-center p-3 border-top bg-light">
-                                <small className="text-muted">
-                                    Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, tableData.length)} of {tableData.length} entries
-                                </small>
-                                <ul className="pagination pagination-sm mb-0">
-                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <button className="page-link border-0" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                                            <IconChevronLeft size={16} />
-                                        </button>
-                                    </li>
-                                    {[...Array(totalPages)].map((_, i) => (
-                                        <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-                                            <button
-                                                className={`page-link mx-1 rounded ${currentPage === i + 1 ? 'bg-primary text-white' : 'text-dark'}`}
-                                                onClick={() => handlePageChange(i + 1)}
-                                            >
-                                                {i + 1}
-                                            </button>
-                                        </li>
-                                    ))}
-                                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                        <button className="page-link border-0" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                                            <IconChevronRight size={16} />
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
+                        <Table
+                            columns={purchaseTableColumns}
+                            data={tableData}
+                            loading={loading}
+                            itemsPerPage={5}
+                        />
                     </div>
                 </div>
             </div>
