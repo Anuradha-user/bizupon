@@ -56,3 +56,32 @@ export const getProductDetails = (params) =>
 //car filter data api
 export const getFilterData = () =>
   api.get(apiLayout.filterApi);
+
+
+
+/** View Purchase Services */
+
+export const getViewPurchaseMasterList = (params = {}) => {
+  const token = localStorage.getItem("accessToken");
+
+  return api.get(apiLayout.viewPurchaseMasterListAPI, {
+    params,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "*/*",
+    },
+  });
+};
+
+
+export const getauctionYardData = (id) =>{
+   const token = localStorage.getItem("accessToken");
+
+  return api.get(apiLayout.auctionYardDataAPI, {
+    params: { id },
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "*/*",
+    },
+  });
+}
